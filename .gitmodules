@@ -1,0 +1,3 @@
+[submodule "sideflow"]
+	path = sideflow
+	url = https://github.com/73rhodes/sideflow

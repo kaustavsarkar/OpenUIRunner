@@ -1,0 +1,90 @@
+##################################################################
+## Files and directories to ignore
+###################################################################
+#
+# Log files
+# ---------
+logs/*
+*.log
+*.out
+*.trc
+*/cache/*
+cache/*
+
+*.tmp
+*.bak
+*.swp
+*~
+
+**/.ade_path/*
+*/.hg/*
+
+# Removing any compiled files
+# ---------------------------
+**/deploy/*
+!ant/deploy/*
+target/*
+**/database/*
+**/.data/*
+**/classes/*
+**/lib/*
+**/javadoc/*
+
+# used for ADF styles caching
+**/temp/*
+
+
+cwallet.sso.lck
+
+*.jar
+!ant/jars/*.jar
+
+*.zip
+*.war
+*.ear
+
+*.rpd
+*.exe
+
+*.class
+
+# Removing any Temp Backup files
+# ---------------------------
+**/Backup/Temp/*
+**/tmp/*
+
+# Ignore Sonar Cache Area
+# ----------------------------
+.sonar/**
+
+# Filter BIP Folders
+# ----------------------------
+**/bip/Admin/Audit  
+**/bip/Admin/Configuration  
+**/bip/Admin/DataSource  
+**/bip/Admin/Delivery  
+**/bip/Admin/Log  
+**/bip/Admin/Map  
+**/bip/Admin/Map_backup  
+**/bip/Admin/Plugins  
+**/bip/Admin/Scheduler  
+**/bip/Admin/Translation
+**/bip/DemoFiles
+**/bip/meta
+**/Tools
+**/Users
+
+!bip/Reports
+
+**/bip/Admin/Security/*
+!bip/Admin/Security/security.xml
+
+/netbeans/target/
+/.metadata/
+
+# Ide specific files
+#---------------------
+.idea/*
+nbactions*.xml
+*.iml
+RemoteSystemsTempFiles/*
