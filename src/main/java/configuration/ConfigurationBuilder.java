@@ -28,16 +28,25 @@ public class ConfigurationBuilder {
     public ConfigurationBuilder() {
     }
 
+    /**
+     * Sets the maven profile, if being used by the project.
+     */
     public ConfigurationBuilder addProfile(String profile) {
         this.profile = profile;
         return this;
     }
 
+    /**
+     * Sets the root url from where the testing needs to begin.
+     */
     public ConfigurationBuilder addLaunchUrl(String launchUrl) {
         this.launchUrl = launchUrl;
         return this;
     }
 
+    /**
+     * Sets the relative path where data file being saved.
+     */
     public ConfigurationBuilder addRelativeDataPath(String relDataPath) {
         this.relDataPath = relDataPath;
         return this;

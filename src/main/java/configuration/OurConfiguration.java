@@ -14,7 +14,6 @@ import java.util.Map;
 public class OurConfiguration {
     private static final String CLASSNAME = OurConfiguration.class.getSimpleName();
     private OurProperties properties;
-    //private WebDriver driver;
     private WebDriverProvider driverProvider;
 
     OurConfiguration() {

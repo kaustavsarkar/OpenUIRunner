@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * The ${@link OURTestRunner} is to be used with Maven Plugin (exec-maven-plugin). While using this file, configuration
+ * The {@link OURTestRunner} is to be used with Maven Plugin
+ * (exec-maven-plugin). While using this file, configuration
  * data needs to be passed via properties file/pom
  */
 public class OURTestRunner {
@@ -42,11 +43,10 @@ public class OURTestRunner {
     }
 
     private static Map<String, String> getArgs(String[] args) {
-        Map<String, String> argsMap = Arrays
+
+        return Arrays
                 .stream(args)
                 .map(argument -> argument.split("="))
                 .collect(Collectors.toMap(config -> config[0], config -> config[1]));
-
-        return argsMap;
     }
 }

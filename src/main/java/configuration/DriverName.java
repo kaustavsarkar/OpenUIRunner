@@ -5,7 +5,7 @@ package configuration;
  * @created: 5/17/2019
  */
 public enum DriverName {
-    CHROME_DRIVER("chromedriver.exe", "chrome", "webdriver.chrome.driver"),
+    CHROME_DRIVER("chromedriver", "chrome", "webdriver.chrome.driver"),
     GECKO_DRIVER("geckodriver.exe", "firefox", "webdriver.gecko.driver");
 
     private String driverName;

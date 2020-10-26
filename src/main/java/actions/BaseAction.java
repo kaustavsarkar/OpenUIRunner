@@ -40,17 +40,5 @@ public class BaseAction extends Steps {
         System.out.println(CLASSNAME + ": entered BeforeScenario::beforeScenario()");
     }
 
-    @Given("I am logged in Application")
-    public void loginToApplication() {
-        String title = driver.getTitle();
-        assertEquals("", title);
-    }
-
-    @Given("I am logged in Application")
-    public void loginToApp() {
-        String title = driver.getTitle();
-        assertEquals("", title);
-    }
-
 
 }
