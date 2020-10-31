@@ -19,7 +19,7 @@ public class MyMainClass {
         ConfigurationBuilder builder = new ConfigurationBuilder();
 
         builder.addDriver(DriverName.CHROME_DRIVER);
-        builder.addStoryRegex("google/test_google.story,");
+        builder.addStoryRegex("catfactrest/cat_fact.story,");
         builder.addDriverPath("/home/kaustav/OUR/");
         builder.addLaunchUrl("https://www.google.com");
         builder.addReportPath("/home/kaustav/OUR");

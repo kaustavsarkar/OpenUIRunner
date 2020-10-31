@@ -1,7 +1,7 @@
 Google Search story
 
 Narrative:
-In order to tes JBehave with Selenium
+In order to test JBehave with Selenium
 As a developer
 I want to search google
 
