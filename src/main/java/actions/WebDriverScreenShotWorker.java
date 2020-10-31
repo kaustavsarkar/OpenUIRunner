@@ -19,9 +19,12 @@ import static org.jbehave.core.annotations.AfterScenario.Outcome.FAILURE;
 
 public class WebDriverScreenShotWorker extends BaseAction {
 
-    protected static final String DEFAULT_SCREENSHOT_PATH_PATTERN = "{0}/screenshots/{2}/scenario-{1}.png";
-    protected static final String DEFAULT_SOURCECODE_PATH_PATTERN = "{0}/sourcecode/{2}/scenario-{1}.html";
-    private static final String CLASSNAME = WebDriverScreenShotWorker.class.getSimpleName();
+    protected static final String DEFAULT_SCREENSHOT_PATH_PATTERN =
+            "{0}/screenshots/{2}/scenario-{1}.png";
+    protected static final String DEFAULT_SOURCECODE_PATH_PATTERN =
+            "{0}/sourcecode/{2}/scenario-{1}.html";
+    private static final String CLASSNAME =
+            WebDriverScreenShotWorker.class.getSimpleName();
     protected final StoryReporterBuilder reporterBuilder;
     protected final String screenshotPathPattern;
     protected WebDriverProvider driverProvider;
@@ -30,13 +33,17 @@ public class WebDriverScreenShotWorker extends BaseAction {
         this(driverProvider, new StoryReporterBuilder());
     }
 
-    public WebDriverScreenShotWorker(WebDriverProvider driverProvider, StoryReporterBuilder storyReporterBuilder) {
-        this(driverProvider, storyReporterBuilder, DEFAULT_SCREENSHOT_PATH_PATTERN);
+    public WebDriverScreenShotWorker(WebDriverProvider driverProvider,
+                                     StoryReporterBuilder storyReporterBuilder) {
+        this(driverProvider, storyReporterBuilder,
+                DEFAULT_SCREENSHOT_PATH_PATTERN);
 
         System.out.println(CLASSNAME + ": constrcutor called ");
     }
 
-    public WebDriverScreenShotWorker(WebDriverProvider driverProvider, StoryReporterBuilder storyReporterBuilder, String screenshotPathPattern) {
+    public WebDriverScreenShotWorker(WebDriverProvider driverProvider,
+                                     StoryReporterBuilder storyReporterBuilder,
+                                     String screenshotPathPattern) {
         super(driverProvider.get());
         this.reporterBuilder = storyReporterBuilder;
         this.screenshotPathPattern = screenshotPathPattern;
@@ -63,19 +70,23 @@ public class WebDriverScreenShotWorker extends BaseAction {
         if (uuidWrappedFailure instanceof PendingStepFound) {
             System.out.println(CLASSNAME + ": There are pending steps");
         }
-        String sourceCodePath = sourceCodePath().replace(" ", "_").replace("|", "");
-        System.out.println(CLASSNAME + ": Source Code shall be saved at : " + sourceCodePath);
+        String sourceCodePath =
+                sourceCodePath().replace(" ", "_").replace("|", "");
+        System.out.println(CLASSNAME + ": Source Code shall be saved at : " +
+                sourceCodePath);
 
         try {
             driverProvider.saveSourceCode(sourceCodePath);
         } catch (Exception e) {
-            System.err.println(CLASSNAME + ": There was a problem while saving source code");
+            System.err.println(CLASSNAME +
+                    ": There was a problem while saving source code");
             e.printStackTrace();
         }
     }
 
     @AfterScenario(uponOutcome = ANY)
-    public void afterScenarioCompletion(UUIDExceptionWrapper uuidWrappedFailure) {
+    public void afterScenarioCompletion(
+            UUIDExceptionWrapper uuidWrappedFailure) {
         System.out.println(CLASSNAME + ": Getting Screenshot");
         if (uuidWrappedFailure instanceof PendingStepFound) {
             return; // we don't take screen-shots for Pending Steps
@@ -83,13 +94,16 @@ public class WebDriverScreenShotWorker extends BaseAction {
 
         String screenshotPath = null;
         if (uuidWrappedFailure != null) {
-            screenshotPath = screenshotPathFailure(uuidWrappedFailure.getUUID());
+            screenshotPath =
+                    screenshotPathFailure(uuidWrappedFailure.getUUID());
         } else {
-            screenshotPath = screenshotPath().replace(" ", "_").replace("|", "");
+            screenshotPath =
+                    screenshotPath().replace(" ", "_").replace("|", "");
         }
 
         System.out.println(CLASSNAME + " Output ");
-        System.out.println(CLASSNAME + ": Screenshots shall be saved at : " + screenshotPath);
+        System.out.println(CLASSNAME + ": Screenshots shall be saved at : " +
+                screenshotPath);
 
         String currentUrl = "[unknown page title]";
 
@@ -102,15 +116,22 @@ public class WebDriverScreenShotWorker extends BaseAction {
         try {
             savedIt = driverProvider.saveScreenshotTo(screenshotPath);
         } catch (WebDriverException e) {
-            System.err.println(CLASSNAME + "Screenshot of page '" + currentUrl + "' has **NOT** been saved. ");
+            System.err.println(CLASSNAME + "Screenshot of page '" + currentUrl +
+                    "' has **NOT** been saved. ");
             e.printStackTrace();
             return;
         } catch (Exception e) {
-            System.out.println(CLASSNAME + "Screenshot of page '" + currentUrl + ". Will try again. Cause: " + e.getMessage());
+            System.out.println(CLASSNAME + "Screenshot of page '" + currentUrl +
+                    ". Will try again. Cause: " + e.getMessage());
             try {
                 savedIt = driverProvider.saveScreenshotTo(screenshotPath);
             } catch (Exception e1) {
-                System.err.println(CLASSNAME + "Screenshot of page '" + currentUrl + "' has **NOT** been saved to '" + screenshotPath + "' because error '" + e.getMessage() + "' encountered. Stack trace follows:");
+                System.err.println(
+                        CLASSNAME + "Screenshot of page '" + currentUrl +
+                                "' has **NOT** been saved to '" +
+                                screenshotPath + "' because error '" +
+                                e.getMessage() +
+                                "' encountered. Stack trace follows:");
                 e.printStackTrace();
                 e1.printStackTrace();
                 return;
@@ -120,14 +141,20 @@ public class WebDriverScreenShotWorker extends BaseAction {
     }
 
     protected String sourceCodePath() {
-        return MessageFormat.format(DEFAULT_SOURCECODE_PATH_PATTERN, reporterBuilder.outputDirectory(), super.driver.getTitle(), StoryContext.getStory().getStoryName());
+        return MessageFormat.format(DEFAULT_SOURCECODE_PATH_PATTERN,
+                reporterBuilder.outputDirectory(), super.driver.getTitle(),
+                StoryContext.getStory().getStoryName());
     }
 
     protected String screenshotPath() {
-        return MessageFormat.format(screenshotPathPattern, reporterBuilder.outputDirectory(), super.driver.getTitle(), StoryContext.getStory().getStoryName());
+        return MessageFormat.format(screenshotPathPattern,
+                reporterBuilder.outputDirectory(), super.driver.getTitle(),
+                StoryContext.getStory().getStoryName());
     }
 
     protected String screenshotPathFailure(UUID uuid) {
-        return MessageFormat.format(screenshotPathPattern, reporterBuilder.outputDirectory(), uuid, StoryContext.getStory().getStoryName());
+        return MessageFormat.format(screenshotPathPattern,
+                reporterBuilder.outputDirectory(), uuid,
+                StoryContext.getStory().getStoryName());
     }
 }

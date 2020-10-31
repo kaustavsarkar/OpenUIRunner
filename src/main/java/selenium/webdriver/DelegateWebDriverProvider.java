@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public abstract class DelegateWebDriverProvider implements WebDriverProvider {
     protected WebDriver driver;
@@ -22,12 +23,12 @@ public abstract class DelegateWebDriverProvider implements WebDriverProvider {
             file.getParentFile().mkdirs();
             try {
                 if (file.exists()) {
-                    if(path.contains("Copy")) {
+                    if (path.contains("Copy")) {
                         int i = Integer.parseInt(path.split("Copy-")[0]);
                         String newPath = path.split("Copy-")[1];
-                        file = new File(newPath+"-Copy-"+(++i)+".png");
+                        file = new File(newPath + "-Copy-" + (++i) + ".png");
                     } else {
-                        file = new File(path+"-Copy-1.png");
+                        file = new File(path + "-Copy-1.png");
                     }
 
 
@@ -49,7 +50,8 @@ public abstract class DelegateWebDriverProvider implements WebDriverProvider {
         file.getParentFile().mkdirs();
         try {
             file.createNewFile();
-            IOUtils.write(pageSource, new FileOutputStream(file), Charset.forName("UTF-8"));
+            IOUtils.write(pageSource, new FileOutputStream(file),
+                    StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException("Can't save source code file", e);
         }

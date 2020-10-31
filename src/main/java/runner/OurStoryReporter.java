@@ -11,7 +11,8 @@ import org.jbehave.core.reporters.NullStoryReporter;
  *
  */
 public class OurStoryReporter extends NullStoryReporter {
-    private static final String CLASSNAME = OurStoryReporter.class.getSimpleName();
+    private static final String CLASSNAME =
+            OurStoryReporter.class.getSimpleName();
     //StoryReporter delegate;
     private String scenarioName;
     private String storyName;
@@ -19,7 +20,8 @@ public class OurStoryReporter extends NullStoryReporter {
     @Override
     public void beforeScenario(Scenario scenario) {
         this.scenarioName = scenario.getTitle();
-        System.out.println(CLASSNAME + ": Inside beforeScenario " + this.scenarioName);
+        System.out.println(
+                CLASSNAME + ": Inside beforeScenario " + this.scenarioName);
 
         //Read data for all scenarios in this story
         StoryContext.readScenarioData();
@@ -35,7 +37,8 @@ public class OurStoryReporter extends NullStoryReporter {
         String threadName = story.getName().replace(".", "_") + "-Our-Thread";
         Thread.currentThread().setName(threadName);
         System.out.println(CLASSNAME + ": Inside beforeStory");
-        System.out.println(CLASSNAME + ": Running inside Thread : " + Thread.currentThread().getName());
+        System.out.println(CLASSNAME + ": Running inside Thread : " +
+                Thread.currentThread().getName());
         System.out.println(CLASSNAME + ": Story Name : " + story.getName());
         StoryContext.createStoryContext();
         StoryProperties storyProps = createStory(story);
@@ -58,14 +61,15 @@ public class OurStoryReporter extends NullStoryReporter {
 
     @Override
     public void afterScenario() {
-        System.out.println(CLASSNAME + ": Inside afterScenario "+this.scenarioName);
+        System.out.println(
+                CLASSNAME + ": Inside afterScenario " + this.scenarioName);
         StoryContext.destroyScenarioData();
         //delegate.afterScenario();
     }
 
     @Override
     public void afterStory(boolean givenStory) {
-        System.out.println(CLASSNAME + ": Inside afterStory "+this.storyName);
+        System.out.println(CLASSNAME + ": Inside afterStory " + this.storyName);
         StoryContext.destroyStoryData();
         //delegate.afterStory(givenStory);
     }

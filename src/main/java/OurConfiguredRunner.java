@@ -24,7 +24,8 @@ public class OurConfiguredRunner {
 
         try {
             if (ourConfiguration == null) {
-                throw new Exception("You need to provide your own Configuration.");
+                throw new Exception(
+                        "You need to provide your own Configuration.");
             }
 
             OurContext.initialize();

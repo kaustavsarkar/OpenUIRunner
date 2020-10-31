@@ -79,7 +79,7 @@ public class OURTestSuite {
 	}
 
 	@After
-	public void teaerDown() {
+	public void tearDown() {
 		OurContext.destroy();
 		driver.close();
 		driver.quit();

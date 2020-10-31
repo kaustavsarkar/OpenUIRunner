@@ -13,14 +13,17 @@ import java.lang.reflect.Constructor;
 
 public class CustomStepFactory extends ScanningStepsFactory {
 
-    private OurConfiguration ourConfiguration;
-    private StoryReporterBuilder storyReporterBuilder;
+    private final OurConfiguration ourConfiguration;
+    private final StoryReporterBuilder storyReporterBuilder;
 
-    public CustomStepFactory(Configuration configuration, Class<?> root, OurConfiguration ourConfiguration) {
+    public CustomStepFactory(Configuration configuration, Class<?> root,
+                             OurConfiguration ourConfiguration) {
         this(configuration, root, ourConfiguration, new StoryReporterBuilder());
     }
 
-    public CustomStepFactory(Configuration configuration, Class<?> root, OurConfiguration ourConfiguration, StoryReporterBuilder storyReporterBuilder) {
+    public CustomStepFactory(Configuration configuration, Class<?> root,
+                             OurConfiguration ourConfiguration,
+                             StoryReporterBuilder storyReporterBuilder) {
         super(configuration, root);
         this.ourConfiguration = ourConfiguration;
         this.storyReporterBuilder = storyReporterBuilder;
@@ -32,15 +35,21 @@ public class CustomStepFactory extends ScanningStepsFactory {
         Constructor constructor;
         try {
             if (type.equals(WebDriverScreenShotWorker.class)) {
-                constructor = type.getDeclaredConstructor(WebDriverProvider.class, StoryReporterBuilder.class);
-                instance = constructor.newInstance(this.ourConfiguration.getDriverProvider(), storyReporterBuilder);
+                constructor =
+                        type.getDeclaredConstructor(WebDriverProvider.class,
+                                StoryReporterBuilder.class);
+                instance = constructor
+                        .newInstance(this.ourConfiguration.getDriverProvider(),
+                                storyReporterBuilder);
             } else if (type.equals(OurAction.class)) {
-				constructor = type.getDeclaredConstructor(OurConfiguration.class);
-				constructor.setAccessible(true);
-				instance = constructor.newInstance(ourConfiguration);
+                constructor =
+                        type.getDeclaredConstructor(OurConfiguration.class);
+                constructor.setAccessible(true);
+                instance = constructor.newInstance(ourConfiguration);
             } else {
                 constructor = type.getDeclaredConstructor(WebDriver.class);
-                instance = constructor.newInstance(this.ourConfiguration.getDriver());
+                instance = constructor
+                        .newInstance(this.ourConfiguration.getDriver());
             }
         } catch (Exception e) {
             e.printStackTrace();

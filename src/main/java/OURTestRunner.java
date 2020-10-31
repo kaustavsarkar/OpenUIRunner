@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 /**
  * The {@link OURTestRunner} is to be used with Maven Plugin
- * (exec-maven-plugin). While using this file, configuration
- * data needs to be passed via properties file/pom
+ * (exec-maven-plugin). While using this file, configuration data needs to be
+ * passed via properties file/pom
  */
 public class OURTestRunner {
     private static final String CLASSNAME = OURTestRunner.class.getSimpleName();
@@ -47,6 +47,7 @@ public class OURTestRunner {
         return Arrays
                 .stream(args)
                 .map(argument -> argument.split("="))
-                .collect(Collectors.toMap(config -> config[0], config -> config[1]));
+                .collect(Collectors
+                        .toMap(config -> config[0], config -> config[1]));
     }
 }

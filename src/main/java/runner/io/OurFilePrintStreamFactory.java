@@ -10,11 +10,13 @@ import java.io.File;
  * @created: 5/21/2019
  */
 public class OurFilePrintStreamFactory extends FilePrintStreamFactory {
-    private static final String CLASSNAME = OurFilePrintStreamFactory.class.getSimpleName();
-    private StoryLocation storyLocation;
+    private static final String CLASSNAME =
+            OurFilePrintStreamFactory.class.getSimpleName();
+    private final StoryLocation storyLocation;
     private String outputDirectory;
 
-    public OurFilePrintStreamFactory(StoryLocation storyLocation, FileConfiguration configuration) {
+    public OurFilePrintStreamFactory(StoryLocation storyLocation,
+                                     FileConfiguration configuration) {
         super(storyLocation, configuration);
         this.storyLocation = storyLocation;
     }
@@ -24,22 +26,32 @@ public class OurFilePrintStreamFactory extends FilePrintStreamFactory {
     }
 
     public void useOutpurDirectory(String outputDirectory) {
-        this.outputDirectory = outputDirectory+"/"+configuration().getRelativeDirectory()+"/"+this.storyLocation.getStoryPath().replace(".","_");
+        this.outputDirectory =
+                outputDirectory + "/" + configuration().getRelativeDirectory() +
+                        "/" +
+                        this.storyLocation.getStoryPath().replace(".", "_");
     }
 
     public File outputDirectory() {
         FileConfiguration configuration = super.configuration();
-        System.out.println(CLASSNAME + ": configuration extention " + configuration.getExtension());
-        System.out.println(CLASSNAME + ": configuration relative directory " + configuration.getRelativeDirectory());
-        System.out.println(CLASSNAME + ": configuration relative directory " + configuration.getPathResolver());
-        System.out.println(CLASSNAME + ": Story Location path: " + storyLocation.getPath());
-        System.out.println(CLASSNAME + ": Story Location Story Path : " + storyLocation.getStoryPath());
+        System.out.println(CLASSNAME + ": configuration extention " +
+                configuration.getExtension());
+        System.out.println(CLASSNAME + ": configuration relative directory " +
+                configuration.getRelativeDirectory());
+        System.out.println(CLASSNAME + ": configuration relative directory " +
+                configuration.getPathResolver());
+        System.out.println(CLASSNAME + ": Story Location path: " +
+                storyLocation.getPath());
+        System.out.println(CLASSNAME + ": Story Location Story Path : " +
+                storyLocation.getStoryPath());
 
-        String outputPath = configuration.getPathResolver().resolveDirectory(storyLocation, configuration.getRelativeDirectory());
+        String outputPath = configuration.getPathResolver()
+                .resolveDirectory(storyLocation,
+                        configuration.getRelativeDirectory());
 
         System.out.println(CLASSNAME + ": output path " + outputPath);
 
-        if(this.outputDirectory != null && !this.outputDirectory.isEmpty()) {
+        if (this.outputDirectory != null && !this.outputDirectory.isEmpty()) {
             return new File(this.outputDirectory);
         }
 

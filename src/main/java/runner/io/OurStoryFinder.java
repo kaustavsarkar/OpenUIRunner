@@ -5,21 +5,25 @@ import org.jbehave.core.io.StoryFinder;
 import java.util.List;
 
 /**
- * TODO Implement this class only if you need to check this jar for custom stories
+ * TODO Implement this class only if you need to check this jar for custom
+ * stories
  *
  * @author: Kaustav Sarkar
  * @created: 05/16/2019
  */
 public class OurStoryFinder extends StoryFinder {
-    private static final String CLASSNAME = OurStoryFinder.class.getSimpleName();
+    private static final String CLASSNAME =
+            OurStoryFinder.class.getSimpleName();
 
     @Override
-    public List<String> findPaths(String rootFolder, List<String> includes, List<String> excludes) {
+    public List<String> findPaths(String rootFolder, List<String> includes,
+                                  List<String> excludes) {
         scanRoot(rootFolder, includes, excludes);
         return null;
     }
 
-    private List<String> scanRoot(String rootFolder, List<String> includes, List<String> excludes) {
+    private List<String> scanRoot(String rootFolder, List<String> includes,
+                                  List<String> excludes) {
         return null;
     }
 }

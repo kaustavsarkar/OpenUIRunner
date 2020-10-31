@@ -129,7 +129,8 @@ public class ConfigurationBuilder {
         props.setUserName(this.userName);
         props.setPassword(this.password);
 
-        System.setProperty(this.driverName.getPropertyKey(), this.webDriverPath + this.driverName.getDriverName());
+        System.setProperty(this.driverName.getPropertyKey(),
+                this.webDriverPath + this.driverName.getDriverName());
         config.createCustomWebProvider(this.driverName);
 
 

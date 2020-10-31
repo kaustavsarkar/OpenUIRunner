@@ -10,7 +10,10 @@ import org.jbehave.core.io.CodeLocations;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
 import org.jbehave.core.junit.JUnitStories;
-import org.jbehave.core.reporters.*;
+import org.jbehave.core.reporters.CrossReference;
+import org.jbehave.core.reporters.Format;
+import org.jbehave.core.reporters.StepFailureDecorator;
+import org.jbehave.core.reporters.SurefireReporter;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import runner.stepfactory.CustomStepFactory;
 
@@ -21,7 +24,7 @@ public class BaseStory extends JUnitStories {
     private static final String CLASSNAME = BaseStory.class.getSimpleName();
     protected Configuration configuration;
     //private WebDriver driver;
-    private OurProperties ourProperties;
+    private final OurProperties ourProperties;
 
     public BaseStory() {
         System.out.println(CLASSNAME + ": entered constructor");
@@ -42,12 +45,15 @@ public class BaseStory extends JUnitStories {
                         true));
 
         CrossReference crossReference = new CrossReference();
-        Format[] formats = new Format[]{Format.HTML, Format.JSON, Format.XML, Format.TXT, Format.STATS};
+        Format[] formats =
+                new Format[]{Format.HTML, Format.JSON, Format.XML, Format.TXT,
+                        Format.STATS};
         configuration = new MostUsefulConfiguration()
                 .useStoryLoader(new LoadFromClasspath(BaseAction.class))
                 .useStoryReporterBuilder(
                         new OurStoryReportBuilder()
-                                .withOutReportDirectory(this.ourProperties.getReportPath())
+                                .withOutReportDirectory(
+                                        this.ourProperties.getReportPath())
                                 .withFormats(formats)
                                 .withReporters(new StepFailureDecorator(
                                         new OurStoryReporter()))
@@ -61,13 +67,15 @@ public class BaseStory extends JUnitStories {
     @Override
     // @Test
     public void run() throws Throwable {
-        System.out.println(CLASSNAME + ": Thread Name: " + Thread.currentThread().getName());
+        System.out.println(CLASSNAME + ": Thread Name: " +
+                Thread.currentThread().getName());
         System.out.println(CLASSNAME + ": entered run()");
 
         //super.useEmbedder(new OurEmbedder());
         Embedder embedder = configuredEmbedder();
         try {
-            System.out.println(CLASSNAME + ": Include Tags : " + ourProperties.getIncludeTag());
+            System.out.println(CLASSNAME + ": Include Tags : " +
+                    ourProperties.getIncludeTag());
             embedder.useMetaFilters(
                     ourProperties.getIncludeTag());
             embedder.useEmbedderControls(new EmbedderControls()
@@ -97,7 +105,8 @@ public class BaseStory extends JUnitStories {
                         .getPath())
                 .getFile();
 
-        System.out.println(CLASSNAME + ": Using Code Location: " + codeLocation);
+        System.out
+                .println(CLASSNAME + ": Using Code Location: " + codeLocation);
 
         List<String> storyList = new ArrayList<>();
         String storyFiles = ourProperties.getStoryFile();

@@ -6,12 +6,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class SimpleWebDriverProvider extends DelegateWebDriverProvider {
-    private static final String CLASSNAME = SimpleWebDriverProvider.class.getSimpleName();
+    private static final String CLASSNAME =
+            SimpleWebDriverProvider.class.getSimpleName();
 
     public SimpleWebDriverProvider(String browser) {
         System.out.println(CLASSNAME + ": Inside Constructor");
         System.out.println(CLASSNAME + ": Driver: " + driver);
-        System.out.println(CLASSNAME + ": Thread: " + Thread.currentThread().getName());
+        System.out.println(
+                CLASSNAME + ": Thread: " + Thread.currentThread().getName());
         if (driver != null) {
             return;
         }
@@ -26,7 +28,7 @@ public class SimpleWebDriverProvider extends DelegateWebDriverProvider {
                 .equalsIgnoreCase(browser)) {
             String driverPath = Thread.currentThread().getContextClassLoader()
                     .getResource("chromedriver.exe").getPath();
-            System.out.println(CLASSNAME+": driver path: "+driverPath);
+            System.out.println(CLASSNAME + ": driver path: " + driverPath);
             System.setProperty("webdriver.chrome.driver",
                     driverPath);
             driver = new ChromeDriver();
