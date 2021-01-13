@@ -9,6 +9,8 @@ import org.jbehave.core.failures.UUIDExceptionWrapper;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import selenium.webdriver.WebDriverProvider;
 
 import java.text.MessageFormat;
@@ -23,8 +25,8 @@ public class WebDriverScreenShotWorker extends BaseAction {
             "{0}/screenshots/{2}/scenario-{1}.png";
     protected static final String DEFAULT_SOURCECODE_PATH_PATTERN =
             "{0}/sourcecode/{2}/scenario-{1}.html";
-    private static final String CLASSNAME =
-            WebDriverScreenShotWorker.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(WebDriverScreenShotWorker.class);
     protected final StoryReporterBuilder reporterBuilder;
     protected final String screenshotPathPattern;
     protected WebDriverProvider driverProvider;
@@ -38,7 +40,7 @@ public class WebDriverScreenShotWorker extends BaseAction {
         this(driverProvider, storyReporterBuilder,
                 DEFAULT_SCREENSHOT_PATH_PATTERN);
 
-        System.out.println(CLASSNAME + ": constrcutor called ");
+        logger.debug("inside constructor");
     }
 
     public WebDriverScreenShotWorker(WebDriverProvider driverProvider,
@@ -66,28 +68,27 @@ public class WebDriverScreenShotWorker extends BaseAction {
 
     @AfterScenario(uponOutcome = FAILURE)
     public void afterScenarioFailure(UUIDExceptionWrapper uuidWrappedFailure) {
-        System.out.println(CLASSNAME + ": There is a scenario failure");
+        logger.warn("There is a scenario failure.");
         if (uuidWrappedFailure instanceof PendingStepFound) {
-            System.out.println(CLASSNAME + ": There are pending steps");
+            logger.warn("There are pending steps.");
         }
         String sourceCodePath =
                 sourceCodePath().replace(" ", "_").replace("|", "");
-        System.out.println(CLASSNAME + ": Source Code shall be saved at : " +
-                sourceCodePath);
+        logger.info("Source code shall be saved at: " + sourceCodePath);
 
         try {
             driverProvider.saveSourceCode(sourceCodePath);
         } catch (Exception e) {
-            System.err.println(CLASSNAME +
-                    ": There was a problem while saving source code");
-            e.printStackTrace();
+            logger.error("There was a problem while saving the source code.",
+                    e);
         }
     }
 
     @AfterScenario(uponOutcome = ANY)
     public void afterScenarioCompletion(
             UUIDExceptionWrapper uuidWrappedFailure) {
-        System.out.println(CLASSNAME + ": Getting Screenshot");
+
+        logger.info("Getting screenshot");
         if (uuidWrappedFailure instanceof PendingStepFound) {
             return; // we don't take screen-shots for Pending Steps
         }
@@ -100,10 +101,7 @@ public class WebDriverScreenShotWorker extends BaseAction {
             screenshotPath =
                     screenshotPath().replace(" ", "_").replace("|", "");
         }
-
-        System.out.println(CLASSNAME + " Output ");
-        System.out.println(CLASSNAME + ": Screenshots shall be saved at : " +
-                screenshotPath);
+        logger.info("Screenshots shall be saved at: " + screenshotPath);
 
         String currentUrl = "[unknown page title]";
 
@@ -116,25 +114,17 @@ public class WebDriverScreenShotWorker extends BaseAction {
         try {
             savedIt = driverProvider.saveScreenshotTo(screenshotPath);
         } catch (WebDriverException e) {
-            System.err.println(CLASSNAME + "Screenshot of page '" + currentUrl +
-                    "' has **NOT** been saved. ");
-            e.printStackTrace();
-            return;
+            logger.error("Screenshot of page " + currentUrl + " has NOT been " +
+                    "saved.", e);
         } catch (Exception e) {
-            System.out.println(CLASSNAME + "Screenshot of page '" + currentUrl +
-                    ". Will try again. Cause: " + e.getMessage());
+            logger.error("Screenshot of page: " + currentUrl + " Will try " +
+                    "again.", e);
             try {
                 savedIt = driverProvider.saveScreenshotTo(screenshotPath);
             } catch (Exception e1) {
-                System.err.println(
-                        CLASSNAME + "Screenshot of page '" + currentUrl +
-                                "' has **NOT** been saved to '" +
-                                screenshotPath + "' because error '" +
-                                e.getMessage() +
-                                "' encountered. Stack trace follows:");
-                e.printStackTrace();
-                e1.printStackTrace();
-                return;
+                logger.error("Screenshot of page '" + currentUrl +
+                        "' has **NOT** been saved to '" +
+                        screenshotPath, e);
             }
         }
 

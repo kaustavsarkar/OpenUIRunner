@@ -3,6 +3,8 @@ package configuration;
 import actions.our.OurProperties;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import selenium.webdriver.CustomWebDriverProvider;
 import selenium.webdriver.SimpleWebDriverProvider;
 import selenium.webdriver.WebDriverProvider;
@@ -12,7 +14,8 @@ import java.io.InputStream;
 import java.util.Map;
 
 public class OurConfiguration {
-    private static final String CLASSNAME = OurConfiguration.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(OurConfiguration.class);
     private OurProperties properties;
     private WebDriverProvider driverProvider;
 
@@ -31,14 +34,12 @@ public class OurConfiguration {
     }
 
     private void resolveDriverProvider() {
-        WebDriverProvider provider = new SimpleWebDriverProvider(
+        this.driverProvider = new SimpleWebDriverProvider(
                 this.properties.getBrowser());
-        this.driverProvider = provider;
     }
 
     private void resolveProperties(String profileConfig, String userConfig) {
-        System.out.println(CLASSNAME
-                + ": Inside resolveProperties(profileConfig,userConfig)");
+        logger.debug("inside resolveProperties");
         ClassLoader classLoader = Thread.currentThread()
                 .getContextClassLoader();
 
@@ -73,8 +74,8 @@ public class OurConfiguration {
     }
 
     public void createCustomWebProvider(DriverName driverName) {
-        WebDriverProvider driverProvider = new CustomWebDriverProvider();
-        driverProvider = ((CustomWebDriverProvider) driverProvider).createProvider(driverName);
+        CustomWebDriverProvider driverProvider = new CustomWebDriverProvider();
+        driverProvider = driverProvider.createProvider(driverName);
         this.driverProvider = driverProvider;
     }
 

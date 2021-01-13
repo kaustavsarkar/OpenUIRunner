@@ -1,5 +1,8 @@
 package actions.our;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -7,8 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-public class OurProperties extends Object {
-    private static final String CLASSNAME = OurProperties.class.getSimpleName();
+public class OurProperties {
+    private static final Logger logger =
+            LoggerFactory.getLogger(OurProperties.class);
     String envName;
     String envURL;
     String dataPath;
@@ -16,24 +20,21 @@ public class OurProperties extends Object {
     List<String> tags;
     String browser;
     String driverName;
-    String userName;
-    String password;
     String reportPath;
 
     /**
-     * instance.name=${env.name} instance.url=${env.url} instance.data=${env.data} our.browser=${test.browser}
+     * instance.name=${env.name} instance.url=${env.url}
+     * instance.data=${env.data} our.browser=${test.browser}
      * our.story=${test.story} our.scenario=${test.scenario}
      *
      * @param is
-     *
      * @throws IOException
      */
     public OurProperties(InputStream is) throws IOException {
         Properties props = new Properties();
         props.load(is);
 
-        System.out
-                .println(CLASSNAME + ": Base Properties : " + props);
+        logger.info("Base Properties: "+props);
 
         this.envName = props.getProperty("run.profile");
         this.envURL = props.getProperty("run.url");
@@ -86,22 +87,6 @@ public class OurProperties extends Object {
         this.browser = browser;
     }
 
-    String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public List<String> getIncludeTag() {
         if (this.tags == null) {
             this.tags = new ArrayList<>();
@@ -149,22 +134,20 @@ public class OurProperties extends Object {
         this.storyFile = aStoryFile != null && !aStoryFile.isEmpty()
                 ? aStoryFile
                 : this.storyFile;
-        this.tags = includeTags != null && !includeTags.isEmpty() ? Arrays.asList(includeTags.split(","))
+        this.tags = includeTags != null && !includeTags.isEmpty() ?
+                Arrays.asList(includeTags.split(","))
                 : this.tags;
         this.driverName = driverName != null && !driverName.isEmpty()
                 ? driverName
                 : this.driverName;
 
-        // ----- Think how it can be removed ------- //
-        this.userName = props.getProperty("local.username");
-        this.password = props.getProperty("local.password");
-        // ----- Think how it can be removed ------- //
-
-        System.out.println(CLASSNAME + ": User Provided : OurProperties [envName=" + aEnvName + ", envURL=" + aEnvUrl
-                + ", dataPath=" + aDataPath + ", storyFile=" + aStoryFile
-                + ", tags=" + includeTags + ", aBrowser=" + aBrowser + ", driverName="
-                + driverName + ", userName=" + this.userName + ", password="
-                + this.password + "]");
+        logger.info("User Provided : OurProperties [envName=" +
+                aEnvName + ", envURL=" + aEnvUrl
+                + ", dataPath=" + aDataPath + ", storyFile=" +
+                aStoryFile
+                + ", tags=" + includeTags + ", aBrowser=" + aBrowser +
+                ", driverName="
+                + driverName);
 
     }
 
@@ -173,8 +156,7 @@ public class OurProperties extends Object {
         return "OurProperties [envName=" + envName + ", envURL=" + envURL
                 + ", dataPath=" + dataPath + ", storyFile=" + storyFile
                 + ", tags=" + tags + ", browser=" + browser + ", driverName="
-                + driverName + ", userName=" + userName + ", password="
-                + password + "]";
+                + driverName;
     }
 
 }

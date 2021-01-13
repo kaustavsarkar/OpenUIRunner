@@ -1,17 +1,20 @@
 package actions.our;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StoryContext {
-    private static final String CLASSNAME = StoryContext.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(StoryContext.class);
     private static ThreadLocal<StoryProperties> storyContext;
     //private static Map<String, Map<String, String>> storyData = new HashMap<>();
     private static Map<String, String> scenarioData = new HashMap<>();
@@ -36,19 +39,20 @@ public class StoryContext {
      * @param title
      */
     public static void extractData(String title) {
-        System.out.println(CLASSNAME + ": Extracting Scenario Data for '" + title + "'");
-        if (getStory().getScenarios() == null || getStory().getScenarios().isEmpty()) {
-            System.out.println(CLASSNAME + ": There is no scenario present hence returning");
+        logger.info("Extracting Scenario Data for '" + title + "'");
+        if (getStory().getScenarios() == null ||
+                getStory().getScenarios().isEmpty()) {
+            logger.warn("There is no scenario present hence returning");
             return;
         }
         ScenarioProperties scenario = getStory().getScenario(title.trim());
-        System.out.println(CLASSNAME + ": Is Scenario Present " + scenario);
+        logger.info("Scenario received: " + scenario);
         scenarioData = scenario.getData();
-        System.out.println(CLASSNAME + " Data Extracted: " + scenarioData);
+        logger.info("Data for scenario: " + scenarioData);
     }
 
     public static String getData(String dataKey) {
-        System.out.println(CLASSNAME + ": Getting Scenario Data: " + scenarioData);
+        logger.info("Getting scenario data: " + scenarioData);
         if (scenarioData == null || scenarioData.isEmpty()) {
             return null;
         }
@@ -60,7 +64,8 @@ public class StoryContext {
      */
     public static void readScenarioData() {
 
-        System.out.println(CLASSNAME + ": Reading Scenarios for Story : " + getStory().getStoryName());
+        logger.info(
+                "Reading scenarios for story: " + getStory().getStoryName());
 
         List<String> scenarios = storyContext
                 .get()
@@ -69,16 +74,16 @@ public class StoryContext {
                 .map(scenario -> scenario.getTitle().trim())
                 .collect(Collectors.toList());
 
-        System.out.println(CLASSNAME + ": Scenarios collected : " + scenarios);
+        logger.info("Scenarios collected: " + scenarios);
 
-        if (scenarios == null || scenarios.isEmpty() ||
-                getStory().getDataPath() == null || getStory().getDataPath().isEmpty()) {
+        if (scenarios.isEmpty() || getStory().getDataPath() == null ||
+                getStory().getDataPath().isEmpty()) {
             return;
         }
 
         ClassLoader classLoader = Thread.currentThread()
                 .getContextClassLoader();
-        System.out.println(CLASSNAME + ": Reading Story Data Path " + getStory().getDataPath());
+        logger.info("Reading Story Data path: " + getStory().getDataPath());
         try (InputStream is = classLoader
                 .getResourceAsStream("data/" + getStory().getDataPath());
              BufferedReader reader = new BufferedReader(
@@ -88,8 +93,7 @@ public class StoryContext {
             int counter = 0;
             Data data = new Data();
             while ((line = reader.readLine()) != null) {
-
-                System.out.println(CLASSNAME + ": Read Line " + line);
+                logger.debug("Reading line: " + line);
 
                 if (counter == 0) {
                     data.setHeaders(line.split(","));
@@ -100,15 +104,12 @@ public class StoryContext {
 
                 String scenarioName = values[0].trim();
 
-                System.out.println(CLASSNAME + ": Scenarios " + scenarios);
-                System.out.println(CLASSNAME + ": Scenario " + scenarioName);
+                logger.info("Scenarios: " + scenarios);
+                logger.info("Scenario: " + scenarioName);
                 if (scenarios.contains(scenarioName)) {
                     data.setValues(values);
                     String[] heads = data.getHeaders();
                     String[] vals = data.getValues();
-
-                    System.out.println(
-                            CLASSNAME + ": Values: " + Arrays.toString(vals));
 
                     if (vals != null && vals.length != 0) {
 
@@ -117,16 +118,12 @@ public class StoryContext {
                                     .getScenario(scenarioName)
                                     .getData()
                                     .put(heads[i], vals[i]);
-                            //scenData.put(heads[i], vals[i]);
                         }
                     }
                 }
-
-
-                //storyData.put(scenarioName, scenData);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed with error: ", e);
         }
 
     }
@@ -136,12 +133,10 @@ public class StoryContext {
     }
 
     public static void destroyStoryData() {
-        // storyData = new HashMap<>();
-        System.out.println(CLASSNAME + ": Clearing Scenarios for : " + getStory().getStoryName());
-
-        boolean removedAll = getStory().getScenarios().removeIf(scenario -> true);
-
-        System.out.println(CLASSNAME + ": ClearedAll Scenarios: " + removedAll);
+        logger.info("Clearing scenarios for: " + getStory().getStoryName());
+        boolean removedAll =
+                getStory().getScenarios().removeIf(scenario -> true);
+        logger.info("Cleared all scenarios: " + removedAll);
     }
 
     private static class Data {

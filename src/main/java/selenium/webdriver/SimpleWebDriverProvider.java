@@ -4,16 +4,18 @@ import configuration.DriverName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimpleWebDriverProvider extends DelegateWebDriverProvider {
-    private static final String CLASSNAME =
-            SimpleWebDriverProvider.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(SimpleWebDriverProvider.class);
 
     public SimpleWebDriverProvider(String browser) {
-        System.out.println(CLASSNAME + ": Inside Constructor");
-        System.out.println(CLASSNAME + ": Driver: " + driver);
-        System.out.println(
-                CLASSNAME + ": Thread: " + Thread.currentThread().getName());
+        logger.debug("Inside constructor");
+        logger.info("Driver: " + driver);
+        logger.debug("Thread: " + Thread.currentThread().getName());
+
         if (driver != null) {
             return;
         }
@@ -28,14 +30,14 @@ public class SimpleWebDriverProvider extends DelegateWebDriverProvider {
                 .equalsIgnoreCase(browser)) {
             String driverPath = Thread.currentThread().getContextClassLoader()
                     .getResource("chromedriver.exe").getPath();
-            System.out.println(CLASSNAME + ": driver path: " + driverPath);
+            logger.info("Driver path: " + driverPath);
             System.setProperty("webdriver.chrome.driver",
                     driverPath);
             driver = new ChromeDriver();
         } else {
+            logger.warn(browser + " is not supported");
             throw new WebDriverNotSupported(browser);
         }
-
     }
 
     public SimpleWebDriverProvider() {
@@ -53,7 +55,7 @@ public class SimpleWebDriverProvider extends DelegateWebDriverProvider {
 
     @Override
     public void end() {
-        System.out.println(CLASSNAME + ": end()");
+        logger.debug("called end()");
         driver.close();
         driver.quit();
     }
