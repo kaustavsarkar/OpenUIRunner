@@ -1,4 +1,6 @@
 import configuration.OurConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import runner.BaseStory;
 import runner.OurContext;
 
@@ -12,12 +14,11 @@ import java.util.stream.Collectors;
  * passed via properties file/pom
  */
 public class OURTestRunner {
-    private static final String CLASSNAME = OURTestRunner.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(OURTestRunner.class);
 
     public static void main(String[] args) throws Throwable {
-
-        System.out.println(
-                CLASSNAME + ": Provided args: " + Arrays.toString(args));
+        logger.info("Provided args: " + Arrays.toString(args));
 
         Map<String, String> ourConfig = getArgs(args);
 
@@ -27,8 +28,7 @@ public class OURTestRunner {
         story.run();
 
         destroyContext();
-        System.out.println(
-                CLASSNAME + ": End of Main Thread");
+        logger.debug("End of Main Thread");
     }
 
     private static void destroyContext() {

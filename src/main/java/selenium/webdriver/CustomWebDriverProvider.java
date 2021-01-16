@@ -9,18 +9,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class CustomWebDriverProvider extends DelegateWebDriverProvider {
     private final MutableCapabilities options;
 
-//	public CustomWebDriverProvider(String browser) {
-//		if (DriverName.GECKO_DRIVER.getBrowser()
-//				.equalsIgnoreCase(browser)) {
-//			super.driver = new FirefoxDriver((FirefoxOptions) options);
-//		} else if (DriverName.CHROME_DRIVER.getBrowser()
-//				.equalsIgnoreCase(browser)) {
-//			super.driver = new ChromeDriver((ChromeOptions) options);
-//		} else {
-//			throw new WebDriverNotSupported(browser);
-//		}
-//	}
-
     public CustomWebDriverProvider(MutableCapabilities options) {
         this.options = options;
     }
