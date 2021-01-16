@@ -10,13 +10,16 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.steps.Steps;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 
 public class CatFactAction extends Steps {
-    private static final String CLASSNAME = CatFactAction.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(CatFactAction.class);
     private final WebDriver driver;
     public CatFactAction(WebDriver driver) {
         this.driver = driver;
@@ -37,7 +40,7 @@ public class CatFactAction extends Steps {
             assertNotNull(headers);
             HttpEntity entity = response.getEntity();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error while making rest call.", e);
         }
     }
 }

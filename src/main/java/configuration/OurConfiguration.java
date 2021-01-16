@@ -50,7 +50,7 @@ public class OurConfiguration {
             properties = new OurProperties(profileIs);
             properties.override(userIS);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error while reading the Properties file", e);
         }
     }
 
@@ -69,7 +69,8 @@ public class OurConfiguration {
         return this.driverProvider;
     }
 
-    public void createCustomWebProviderWithOptions(DriverName driverName, MutableCapabilities options) {
+    public void createCustomWebProviderWithOptions(DriverName driverName,
+                                                   MutableCapabilities options) {
         //TODO
     }
 

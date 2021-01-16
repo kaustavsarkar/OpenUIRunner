@@ -108,7 +108,7 @@ public class WebDriverScreenShotWorker extends BaseAction {
         try {
             currentUrl = this.driver.getCurrentUrl();
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error("Error while getting the url", e);
         }
         boolean savedIt = false;
         try {
