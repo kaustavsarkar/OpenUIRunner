@@ -2,6 +2,8 @@ package runner.io;
 
 import org.jbehave.core.io.StoryLocation;
 import org.jbehave.core.reporters.FilePrintStreamFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -10,8 +12,8 @@ import java.io.File;
  * @created: 5/21/2019
  */
 public class OurFilePrintStreamFactory extends FilePrintStreamFactory {
-    private static final String CLASSNAME =
-            OurFilePrintStreamFactory.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(OurFilePrintStreamFactory.class);
     private final StoryLocation storyLocation;
     private String outputDirectory;
 
@@ -25,7 +27,7 @@ public class OurFilePrintStreamFactory extends FilePrintStreamFactory {
         return super.outputFile();
     }
 
-    public void useOutpurDirectory(String outputDirectory) {
+    public void useOutputDirectory(String outputDirectory) {
         this.outputDirectory =
                 outputDirectory + "/" + configuration().getRelativeDirectory() +
                         "/" +
@@ -34,22 +36,22 @@ public class OurFilePrintStreamFactory extends FilePrintStreamFactory {
 
     public File outputDirectory() {
         FileConfiguration configuration = super.configuration();
-        System.out.println(CLASSNAME + ": configuration extention " +
+        logger.info("configuration extension " +
                 configuration.getExtension());
-        System.out.println(CLASSNAME + ": configuration relative directory " +
+        logger.info("configuration relative directory " +
                 configuration.getRelativeDirectory());
-        System.out.println(CLASSNAME + ": configuration relative directory " +
+        logger.info("configuration relative directory " +
                 configuration.getPathResolver());
-        System.out.println(CLASSNAME + ": Story Location path: " +
+        logger.info("Story Location path: " +
                 storyLocation.getPath());
-        System.out.println(CLASSNAME + ": Story Location Story Path : " +
+        logger.info("Story Location Story Path : " +
                 storyLocation.getStoryPath());
 
         String outputPath = configuration.getPathResolver()
                 .resolveDirectory(storyLocation,
                         configuration.getRelativeDirectory());
 
-        System.out.println(CLASSNAME + ": output path " + outputPath);
+        logger.info("output path " + outputPath);
 
         if (this.outputDirectory != null && !this.outputDirectory.isEmpty()) {
             return new File(this.outputDirectory);

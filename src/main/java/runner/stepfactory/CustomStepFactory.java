@@ -7,12 +7,15 @@ import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.ScanningStepsFactory;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import selenium.webdriver.WebDriverProvider;
 
 import java.lang.reflect.Constructor;
 
 public class CustomStepFactory extends ScanningStepsFactory {
-
+    private static final Logger logger =
+            LoggerFactory.getLogger(CustomStepFactory.class);
     private final OurConfiguration ourConfiguration;
     private final StoryReporterBuilder storyReporterBuilder;
 
@@ -32,7 +35,7 @@ public class CustomStepFactory extends ScanningStepsFactory {
     @Override
     public Object createInstanceOfType(Class<?> type) {
         Object instance;
-        Constructor constructor;
+        Constructor<?> constructor;
         try {
             if (type.equals(WebDriverScreenShotWorker.class)) {
                 constructor =
@@ -52,7 +55,7 @@ public class CustomStepFactory extends ScanningStepsFactory {
                         .newInstance(this.ourConfiguration.getDriver());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed while creating instance of Actions", e);
             throw new StepsInstanceNotFound(type, this);
         }
         return instance;

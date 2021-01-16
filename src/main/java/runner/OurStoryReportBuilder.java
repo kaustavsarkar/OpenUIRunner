@@ -3,6 +3,8 @@ package runner;
 import org.jbehave.core.io.StoryLocation;
 import org.jbehave.core.reporters.FilePrintStreamFactory;
 import org.jbehave.core.reporters.StoryReporterBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import runner.io.OurFilePrintStreamFactory;
 
 import java.io.File;
@@ -12,30 +14,29 @@ import java.io.File;
  * @created: 5/20/2019
  */
 public class OurStoryReportBuilder extends StoryReporterBuilder {
-    private static final String CLASSNAME =
-            OurStoryReportBuilder.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(OurStoryReportBuilder.class);
     private String outReportDirectory;
 
     @Override
     public File outputDirectory() {
         if (outReportDirectory == null || this.outReportDirectory.isEmpty()) {
-            System.out.println(CLASSNAME +
-                    ": There is no Output Directory provided for view reports. Falling back to defaults");
+            logger.warn("There is no Output Directory provided for view " +
+                    "reports. Falling back to defaults");
             return super.outputDirectory();
         }
 
         File outDirectory = new File(outReportDirectory);
 
         if (!outDirectory.exists()) {
-            System.err.println(CLASSNAME + ": There is no such directory : " +
+            logger.warn("There is no such directory : " +
                     outDirectory.getAbsolutePath());
             return super.outputDirectory();
         }
 
         if (!outDirectory.isDirectory()) {
-            System.err.println(
-                    CLASSNAME + ": Path provided is not a directory : " +
-                            outDirectory.getAbsolutePath());
+            logger.warn("Path provided is not a directory : " +
+                    outDirectory.getAbsolutePath());
             return super.outputDirectory();
         }
 
@@ -48,11 +49,9 @@ public class OurStoryReportBuilder extends StoryReporterBuilder {
         OurFilePrintStreamFactory factory =
                 new OurFilePrintStreamFactory(new StoryLocation(codeLocation(),
                         storyPath), fileConfiguration(""));
-        factory.useOutpurDirectory(this.outReportDirectory);
-        System.out.println(
-                CLASSNAME + ": factor output file : " + factory.outputFile());
-        System.out.println(CLASSNAME + ": factor output directory : " +
-                factory.outputDirectory());
+        factory.useOutputDirectory(this.outReportDirectory);
+        logger.info("factory output file : " + factory.outputFile());
+        logger.info("factory output directory : " + factory.outputDirectory());
         return factory;
     }
 

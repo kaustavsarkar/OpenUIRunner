@@ -2,9 +2,12 @@ package runner;
 
 import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.embedder.StoryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OurEmbedder extends Embedder {
-    private static final String CLASSNAME = OurEmbedder.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(OurEmbedder.class);
     private String userScenario;
 
     public OurEmbedder() {
@@ -18,7 +21,7 @@ public class OurEmbedder extends Embedder {
 
     @Override
     public StoryManager storyManager() {
-        System.out.println(CLASSNAME + ": Inside storyManager()");
+        logger.debug("Inside storyManager()");
         if (storyManager == null) {
             storyManager = createStoryManager();
         }

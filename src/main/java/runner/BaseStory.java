@@ -15,29 +15,29 @@ import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StepFailureDecorator;
 import org.jbehave.core.reporters.SurefireReporter;
 import org.jbehave.core.steps.InjectableStepsFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import runner.stepfactory.CustomStepFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BaseStory extends JUnitStories {
-    private static final String CLASSNAME = BaseStory.class.getSimpleName();
-    protected Configuration configuration;
-    //private WebDriver driver;
+    private static final Logger logger =
+            LoggerFactory.getLogger(BaseStory.class);
     private final OurProperties ourProperties;
+    protected Configuration configuration;
 
     public BaseStory() {
-        System.out.println(CLASSNAME + ": entered constructor");
-        //this.driver = OurContext.getDriver();
+        logger.debug("entered constructor");
         this.ourProperties = OurContext.getProperties();
 
-        System.out.println(
-                CLASSNAME + ": Properties : " + this.ourProperties.toString());
+        logger.info("Properties: " + this.ourProperties.toString());
     }
 
     @Override
     public Configuration configuration() {
-        System.out.println(CLASSNAME + ": entered configuration");
+        logger.debug("entered configuration");
         SurefireReporter surefireReporter = new SurefireReporter(
                 this.getClass(),
                 new SurefireReporter.Options("our-surefire",
@@ -65,16 +65,14 @@ public class BaseStory extends JUnitStories {
     }
 
     @Override
-    // @Test
     public void run() throws Throwable {
-        System.out.println(CLASSNAME + ": Thread Name: " +
+        logger.debug("Thread Name: " +
                 Thread.currentThread().getName());
-        System.out.println(CLASSNAME + ": entered run()");
+        logger.debug("entered run()");
 
-        //super.useEmbedder(new OurEmbedder());
         Embedder embedder = configuredEmbedder();
         try {
-            System.out.println(CLASSNAME + ": Include Tags : " +
+            logger.info("Include Tags : " +
                     ourProperties.getIncludeTag());
             embedder.useMetaFilters(
                     ourProperties.getIncludeTag());
@@ -82,9 +80,10 @@ public class BaseStory extends JUnitStories {
                     .doIgnoreFailureInStories(true).useThreads(1)
                     .doIgnoreFailureInView(true)
                     .doFailOnStoryTimeout(true)
+                    //TODO(kaustav): add it to configuration.
                     .useStoryTimeouts("300"));
             List<String> storyPath = storyPaths();
-            System.out.println(CLASSNAME + ": Story PAth: " + storyPath);
+            logger.info("Story PAth: " + storyPath);
             embedder.runStoriesAsPaths(storyPath);
         } finally {
             embedder.generateCrossReference();
@@ -94,9 +93,7 @@ public class BaseStory extends JUnitStories {
     }
 
     protected List<String> storyPaths() {
-        System.out.println(CLASSNAME + ": entered storyPaths()");
-//        String codeLocation = CodeLocations
-//                .codeLocationFromClass(this.getClass()).getFile();
+        logger.debug("entered storyPaths()");
         String codeLocation = CodeLocations
                 .codeLocationFromPath(Thread
                         .currentThread()
@@ -105,8 +102,7 @@ public class BaseStory extends JUnitStories {
                         .getPath())
                 .getFile();
 
-        System.out
-                .println(CLASSNAME + ": Using Code Location: " + codeLocation);
+        logger.info("Using Code Location: " + codeLocation);
 
         List<String> storyList = new ArrayList<>();
         String storyFiles = ourProperties.getStoryFile();
@@ -122,13 +118,13 @@ public class BaseStory extends JUnitStories {
             storyList.add("**/**.story");
         }
 
-        System.out.println(CLASSNAME + ": Story List" + storyList);
+        logger.info("Story List" + storyList);
         return new StoryFinder().findPaths(codeLocation, storyList, null);
     }
 
     @Override
     public InjectableStepsFactory stepsFactory() {
-        System.out.println(CLASSNAME + ": entered stepsFactory()");
+        logger.debug("entered stepsFactory()");
         InjectableStepsFactory stepsFactory =
                 new CustomStepFactory(
                         this.configuration,
@@ -136,8 +132,6 @@ public class BaseStory extends JUnitStories {
                         OurContext.get(),
                         configuration.storyReporterBuilder()
                 );
-        //  new CustomStepFactory(this.configuration, BaseAction.class,
-        //   OurContext.get());
         return stepsFactory;
     }
 }

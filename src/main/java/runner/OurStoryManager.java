@@ -29,25 +29,6 @@ public class OurStoryManager extends StoryManager {
     @Override
     public void runStoriesAsPaths(List<String> storyPaths, MetaFilter filter,
                                   BatchFailures failures) {
-
-		/*List<Story> stories = storiesOfPaths(storyPaths).stream().filter(story -> {
-			List<Scenario> scenarios = story.getScenarios();
-
-			scenarios = scenarios.stream().filter(scenario -> {
-				scenario.asMeta("");
-				return scenario.getTitle().equals(userScenario);
-			}).collect(Collectors.toList());
-			
-			
-			story.getScenarios().clear();
-			story.getScenarios().addAll(scenarios);
-			return (scenarios != null && !scenarios.isEmpty());
-		}).map(story -> {
-			story.getScenarios().clear();
-			story.getScenarios().addAll(scenarios);
-			
-			return story;
-		}).collect(Collectors.toList());*/
         List<Story> stories = storiesOfPaths(storyPaths);
         runStories(stories, filter, failures);
     }

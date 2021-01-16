@@ -8,8 +8,6 @@ import org.openqa.selenium.WebDriver;
  * @author kaustav
  */
 public class OurContext {
-    private static final String CLASSNAME = OurContext.class.getSimpleName();
-
     /**
      * A {@link ThreadLocal} instance of {@link OurConfiguration} which can be
      * used to get the required configurations throughout the application.

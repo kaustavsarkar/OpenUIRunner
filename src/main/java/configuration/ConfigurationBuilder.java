@@ -13,9 +13,12 @@ import java.util.List;
 public class ConfigurationBuilder {
     private static final Logger logger =
             LoggerFactory.getLogger(ConfigurationBuilder.class);
-    private static final String NULL_PROFILE_MSG = "There needs to be a profile value mentioned." +
-            " This shall be used to determine Stories and Data to be picked";
-    private static final String NULL_LAUNCH_URL = "Launch URL is mandatory. There was none provided";
+    private static final String NULL_PROFILE_MSG =
+            "There needs to be a profile value mentioned." +
+                    " This shall be used to determine Stories and Data to be " +
+                    "picked";
+    private static final String NULL_LAUNCH_URL =
+            "Launch URL is mandatory. There was none provided";
     private String profile;
     private String launchUrl;
     private String relDataPath;
@@ -142,7 +145,9 @@ public class ConfigurationBuilder {
 
     private void addDefaults() {
         if (nullEmptyCheck(this.relDataPath)) {
-            logger.warn("There is no Data path provided. Falling back to default: /data/{profile}/TestData.csv");
+            logger.warn(
+                    "There is no Data path provided. Falling back to " +
+                            "default:+ /data/{profile}/TestData.csv");
             this.relDataPath = this.profile + "/TestData.csv";
         }
 
@@ -152,22 +157,29 @@ public class ConfigurationBuilder {
         }
 
         if (nullEmptyCheck(this.webDriverPath)) {
-            logger.warn("No drivers path is provided. System shall check in Classpath");
+            logger.warn(
+                    "No drivers path is provided. System shall check in " +
+                            "Classpath");
             System.setProperty(this.driverName.getPropertyKey(),
                     Thread.currentThread().getContextClassLoader()
-                            .getResource(this.driverName.getDriverName()).getPath());
+                            .getResource(this.driverName.getDriverName())
+                            .getPath());
         }
 
         if (this.includeTags == null || this.includeTags.isEmpty()) {
-            logger.warn("There are no include tags provided. All scenarios added in stories shall run");
+            logger.warn(
+                    "There are no include tags provided. All scenarios added " +
+                            "in stories shall run");
         }
 
         if (nullEmptyCheck(this.storyRegex)) {
-            logger.warn("There are no stories provided. All stories under /" + this.profile + "/ shall be run");
+            logger.warn("There are no stories provided. All stories under /" +
+                    this.profile + "/ shall be run");
         }
 
         if (nullEmptyCheck(this.reportPath)) {
-            logger.warn("No Path for Report Provided. Falling back to jbehave/");
+            logger.warn(
+                    "No Path for Report Provided. Falling back to jbehave/");
         }
     }
 

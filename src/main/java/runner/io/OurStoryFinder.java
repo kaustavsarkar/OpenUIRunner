@@ -12,8 +12,6 @@ import java.util.List;
  * @created: 05/16/2019
  */
 public class OurStoryFinder extends StoryFinder {
-    private static final String CLASSNAME =
-            OurStoryFinder.class.getSimpleName();
 
     @Override
     public List<String> findPaths(String rootFolder, List<String> includes,

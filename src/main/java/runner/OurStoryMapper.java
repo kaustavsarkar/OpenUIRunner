@@ -43,12 +43,7 @@ public class OurStoryMapper extends StoryMapper {
     }
 
     private Set<Story> storiesFor(String filter) {
-        Set<Story> stories = map.get(filter);
-        if (stories == null) {
-            stories = new HashSet<>();
-            map.put(filter, stories);
-        }
-        return stories;
+        return map.computeIfAbsent(filter, k -> new HashSet<>());
     }
 
     @Override
