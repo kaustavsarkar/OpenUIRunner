@@ -1,6 +1,8 @@
 package configuration;
 
 import actions.our.OurProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -9,7 +11,8 @@ import java.util.List;
  * @created: 5/17/2019
  */
 public class ConfigurationBuilder {
-    private static final String CLASSNAME = ConfigurationBuilder.class.getSimpleName();
+    private static final Logger logger =
+            LoggerFactory.getLogger(ConfigurationBuilder.class);
     private static final String NULL_PROFILE_MSG = "There needs to be a profile value mentioned." +
             " This shall be used to determine Stories and Data to be picked";
     private static final String NULL_LAUNCH_URL = "Launch URL is mandatory. There was none provided";
@@ -55,7 +58,8 @@ public class ConfigurationBuilder {
     public ConfigurationBuilder addStory(String story) {
         if (this.storyRegex != null) {
             //Add a warning here
-            System.out.println(CLASSNAME + ": Story has been already provided your provided will not hold precedence " + story);
+            logger.warn("Story has been already provided your provided will " +
+                    "not hold precedence " + story);
         }
         this.storyRegex = story;
         return this;
@@ -63,7 +67,8 @@ public class ConfigurationBuilder {
 
     public ConfigurationBuilder addCSVStories(String stories) {
         if (this.storyRegex != null) {
-            System.out.println(CLASSNAME + ": Stor(y/ies) has/have already been added. Your CSV stories may get ignored : " + stories);
+            logger.warn("Stor(y/ies) has/have already been added. Your CSV " +
+                    "stories may get ignored : " + stories);
         }
         this.storyRegex = stories;
         return this;
@@ -71,7 +76,8 @@ public class ConfigurationBuilder {
 
     public ConfigurationBuilder addStoryRegex(String stories) {
         if (this.storyRegex != null) {
-            System.out.println(CLASSNAME + ": Beware!! You have added stories already, there is the chance of them getting over-ridden");
+            logger.info("Beware!! You have added stories already, there is " +
+                    "the chance of them getting over-ridden");
         }
         this.storyRegex = stories;
         return this;
@@ -126,9 +132,6 @@ public class ConfigurationBuilder {
         props.setStoryFile(this.storyRegex);
         props.setReportPath(this.reportPath);
 
-        props.setUserName(this.userName);
-        props.setPassword(this.password);
-
         System.setProperty(this.driverName.getPropertyKey(),
                 this.webDriverPath + this.driverName.getDriverName());
         config.createCustomWebProvider(this.driverName);
@@ -139,32 +142,32 @@ public class ConfigurationBuilder {
 
     private void addDefaults() {
         if (nullEmptyCheck(this.relDataPath)) {
-            System.out.println(CLASSNAME + ": There is no Data path provided. Falling back to default: /data/{profile}/TestData.csv");
+            logger.warn("There is no Data path provided. Falling back to default: /data/{profile}/TestData.csv");
             this.relDataPath = this.profile + "/TestData.csv";
         }
 
         if (this.driverName == null) {
-            System.out.println(CLASSNAME + ": No drivers are provided. Falling back to Chrome");
+            logger.warn("No drivers are provided. Falling back to Chrome");
             this.driverName = DriverName.CHROME_DRIVER;
         }
 
         if (nullEmptyCheck(this.webDriverPath)) {
-            System.out.println(CLASSNAME + ": No drivers path is provided. System shall check in Classpath");
+            logger.warn("No drivers path is provided. System shall check in Classpath");
             System.setProperty(this.driverName.getPropertyKey(),
                     Thread.currentThread().getContextClassLoader()
                             .getResource(this.driverName.getDriverName()).getPath());
         }
 
         if (this.includeTags == null || this.includeTags.isEmpty()) {
-            System.out.println(CLASSNAME + ": There are no include tags provided. All scenarios added in stories shall run");
+            logger.warn("There are no include tags provided. All scenarios added in stories shall run");
         }
 
         if (nullEmptyCheck(this.storyRegex)) {
-            System.out.println(CLASSNAME + ": There are no stories provided. All stories under /" + this.profile + "/ shall be run");
+            logger.warn("There are no stories provided. All stories under /" + this.profile + "/ shall be run");
         }
 
         if (nullEmptyCheck(this.reportPath)) {
-            System.out.println(CLASSNAME + ": No Path for Report Provided. Falling back to jbehave/");
+            logger.warn("No Path for Report Provided. Falling back to jbehave/");
         }
     }
 
