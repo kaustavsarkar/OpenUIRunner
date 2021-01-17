@@ -24,6 +24,7 @@ cache/*
 **/deploy/*
 !ant/deploy/*
 target/*
+core/target/*
 **/database/*
 **/.data/*
 **/classes/*
