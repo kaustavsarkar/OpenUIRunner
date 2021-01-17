@@ -4,11 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>parent-OpenUIRunner</artifactId>
-        <groupId>org.openui.runner</groupId>
+        <groupId>org.our</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>OpenUIRunner</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <groupId>org.our.core</groupId>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -24,23 +25,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <!-- This plugin is for running jbehave -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>OURTestRunner</mainClass>
-                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
                 </configuration>
             </plugin>
         </plugins>
