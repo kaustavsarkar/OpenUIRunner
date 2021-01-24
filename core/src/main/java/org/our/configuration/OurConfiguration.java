@@ -86,17 +86,48 @@ public abstract class OurConfiguration {
 
     @AutoValue.Builder
     public abstract static class Builder {
+        /**
+         * To be used internally in the builder for setting a custom
+         * implementation of {@link WebDriverProvider} created based on the
+         * value provided by the user via {@link DriverName}.
+         * @param webDriverProvider - custom implementation of
+         * {@link WebDriverProvider}.
+         */
         abstract Builder setWebDriverProvider(
                 WebDriverProvider webDriverProvider);
 
+        /**
+         * To be used internally to set the {@link WebDriver} client intends
+         * to use for testing the application. It shall be determined by the
+         * input value of {@link DriverName}.
+         * @param webDriver - driver based on the browser the client shall be
+         *                 testing their application on.
+         */
         abstract Builder setWebDriver(WebDriver webDriver);
 
-        public abstract Builder setProfile(Optional<String> profile);
-
+        /**
+         * Sets the Url which shall be launched when the web driver starts.
+         * This should be the entry point from where the testing is required
+         * to be done.
+         * @param launchUrl - entry point of the application from where the
+         *                  testing needs to start.
+         */
         public abstract Builder setLaunchUrl(String launchUrl);
 
+        /**
+         * Sets the path where the data shall be found. The data needs to be
+         * stored inside the resources/data/ folder. The method assumes this
+         * shall be the base path for the data files. Client may add further
+         * nested folders for storing data for different test cases.
+         * @param relDataPath - data path relative to /resources/data.
+         */
         public abstract Builder setRelDataPath(String relDataPath);
 
+        /**
+         * // TODO(kaustav): Add some doc here.
+         * @param storyRegex
+         * @return
+         */
         public abstract Builder setStoryRegex(Optional<String> storyRegex);
 
         public abstract Builder setIncludeTags(
@@ -104,10 +135,20 @@ public abstract class OurConfiguration {
 
         public abstract Builder setWebDriverPath(String webDriverPath);
 
+        /**
+         * Sets the path in the file system where the reports are required to
+         * be saved.
+         * Note: This method is not platform agnostic, hence, the format to
+         * provide the FS path shall be different for, say, Windows, Mac and
+         * linux.
+         */
         public abstract Builder setReportPath(String reportPath);
 
         abstract DriverName getDriverName();
 
+        /**
+         * Sets the driver which the client needs to use for testing purpose.
+         */
         public abstract Builder setDriverName(DriverName driverName);
 
         abstract OurConfiguration autoBuild();
