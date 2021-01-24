@@ -1,90 +1,79 @@
 package org.our.configuration;
 
-import org.our.actions.OurProperties;
-import org.openqa.selenium.MutableCapabilities;
+import com.google.auto.value.AutoValue;
 import org.openqa.selenium.WebDriver;
+import org.our.selenium.webdriver.CustomWebDriverProvider;
+import org.our.selenium.webdriver.WebDriverProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.our.selenium.webdriver.CustomWebDriverProvider;
-import org.our.selenium.webdriver.SimpleWebDriverProvider;
-import org.our.selenium.webdriver.WebDriverProvider;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
-public class OurConfiguration {
+@AutoValue
+public abstract class OurConfiguration {
     private static final Logger logger =
             LoggerFactory.getLogger(OurConfiguration.class);
-    private OurProperties properties;
-    private WebDriverProvider driverProvider;
 
-    OurConfiguration() {
+    public abstract WebDriverProvider getWebDriverProvider();
+
+    public abstract WebDriver getWebDriver();
+
+    public abstract Optional<String> getProfile();
+
+    public abstract String getLaunchUrl();
+
+    public abstract String getRelDataPath();
+
+    public abstract Optional<String> getStoryRegex();
+
+    public abstract Optional<List<String>> getIncludeTags();
+
+    public abstract DriverName getDriverName();
+
+    public abstract String getWebDriverPath();
+
+    public abstract String getReportPath();
+
+    public static Builder newBuilder() {
+        return new AutoValue_OurConfiguration.Builder();
     }
 
-    public OurConfiguration(Map<String, String> configMap) {
-        String profileConfig = configMap
-                .get(ConfigOptions.PROFILE_CONFIG.getConfigName());
-        String userConfig = configMap
-                .get(ConfigOptions.USER_CONFIG.getConfigName());
+    @AutoValue.Builder
+    public abstract static class Builder {
+        abstract Builder setWebDriverProvider(WebDriverProvider webDriverProvider);
 
-        resolveProperties(profileConfig, userConfig);
+        abstract Builder setWebDriver(WebDriver webDriver);
 
-        resolveDriverProvider();
-    }
+        public abstract Builder setDriverName(DriverName driverName);
 
-    private void resolveDriverProvider() {
-        this.driverProvider = new SimpleWebDriverProvider(
-                this.properties.getBrowser());
-    }
+        public abstract Builder setProfile(Optional<String> profile);
 
-    private void resolveProperties(String profileConfig, String userConfig) {
-        logger.debug("inside resolveProperties");
-        ClassLoader classLoader = Thread.currentThread()
-                .getContextClassLoader();
+        public abstract Builder setLaunchUrl(String launchUrl);
 
-        try (InputStream profileIs = classLoader
-                .getResourceAsStream(profileConfig);
-             InputStream userIS = classLoader
-                     .getResourceAsStream(userConfig)) {
-            properties = new OurProperties(profileIs);
-            properties.override(userIS);
-        } catch (IOException e) {
-            logger.error("Error while reading the Properties file", e);
-        }
-    }
+        public abstract Builder setRelDataPath(String relDataPath);
 
-    public OurProperties getProperties() {
-        if (this.properties == null) {
-            this.properties = new OurProperties();
-        }
-        return this.properties;
-    }
+        public abstract Builder setStoryRegex(Optional<String> storyRegex);
 
-    public WebDriver getDriver() {
-        return this.driverProvider.get();
-    }
+        public abstract Builder setIncludeTags(Optional<List<String>> includeTags);
 
-    public WebDriverProvider getDriverProvider() {
-        return this.driverProvider;
-    }
+        public abstract Builder setWebDriverPath(String webDriverPath);
 
-    public void createCustomWebProviderWithOptions(DriverName driverName,
-                                                   MutableCapabilities options) {
-        //TODO
-    }
+        public abstract Builder setReportPath(String reportPath);
 
-    public void createCustomWebProvider(DriverName driverName) {
-        CustomWebDriverProvider driverProvider = new CustomWebDriverProvider();
-        driverProvider = driverProvider.createProvider(driverName);
-        this.driverProvider = driverProvider;
-    }
+        abstract DriverName getDriverName();
 
-    public void destroyDriver() {
-        WebDriver driver = this.driverProvider.get();
-        if (driver != null) {
-            driver.close();
-            driver.quit();
+        abstract OurConfiguration autoBuild();
+
+        public OurConfiguration build() {
+            CustomWebDriverProvider driverProvider = new CustomWebDriverProvider();
+            if (getDriverName() == null) {
+                driverProvider = driverProvider.createProvider(DriverName.CHROME_DRIVER);
+            } else {
+                driverProvider = driverProvider.createProvider(getDriverName());
+            }
+            setWebDriverProvider(driverProvider);
+            return autoBuild();
         }
     }
 }
