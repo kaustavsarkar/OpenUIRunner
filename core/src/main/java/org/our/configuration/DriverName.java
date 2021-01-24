@@ -8,9 +8,9 @@ public enum DriverName {
     CHROME_DRIVER("chromedriver", "chrome", "webdriver.chrome.driver"),
     GECKO_DRIVER("geckodriver.exe", "firefox", "webdriver.gecko.driver");
 
-    private String driverName;
-    private String browser;
-    private String systemProp;
+    private final String driverName;
+    private final String browser;
+    private final String systemProp;
 
     DriverName(String name, String browser, String systemProp) {
         this.driverName = name;
