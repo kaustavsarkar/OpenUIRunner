@@ -1,162 +1,77 @@
 package org.our.actions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.auto.value.AutoValue;
+import org.our.configuration.OurConfiguration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
-public class OurProperties {
-    private static final Logger logger =
-            LoggerFactory.getLogger(OurProperties.class);
-    String envName;
-    String envURL;
-    String dataPath;
-    String storyFile;
-    List<String> tags;
-    String browser;
-    String driverName;
-    String reportPath;
+/**
+ * Properties used by OUR for running JBehave and Selenium. The properties
+ * provided by this class are generated based on the input provided in {@link
+ * OurConfiguration}. Values provided in {@link OurConfiguration} shall be
+ * translated to {@link OurProperties} and these values shall be used by the
+ * application.
+ */
+@AutoValue
+public abstract class OurProperties {
+
+    public static Builder newBuilder() {
+        return new AutoValue_OurProperties.Builder();
+    }
 
     /**
-     * instance.name=${env.name} instance.url=${env.url}
-     * instance.data=${env.data} our.browser=${test.browser}
-     * our.story=${test.story} our.scenario=${test.scenario}
-     *
-     * @param is
-     * @throws IOException
+     * Returns the URL provided in {@link OurConfiguration#getLaunchUrl()}.
      */
-    public OurProperties(InputStream is) throws IOException {
-        Properties props = new Properties();
-        props.load(is);
+    public abstract String getEnvURL();
 
-        logger.info("Base Properties: "+props);
+    /**
+     * Returns the path of csv file for running OUR.
+     */
+    public abstract String getDataPath();
 
-        this.envName = props.getProperty("run.profile");
-        this.envURL = props.getProperty("run.url");
-        this.dataPath = props.getProperty("run.data");
-        this.browser = props.getProperty("run.browser");
-        this.driverName = props.getProperty("run.driver");
-    }
+    /**
+     * Returns the path of the story file.
+     */
+    public abstract String getStoryFile();
 
-    public OurProperties() {
+    /**
+     * Returns the browser where OUR shall be run.
+     */
+    public abstract String getBrowser();
 
-    }
+    /**
+     * Returns a list of include tags being added to the story files.
+     */
+    public abstract List<String> getIncludeTags();
 
-    public String getEnvName() {
-        return envName;
-    }
+    /**
+     * Returns the name of the driver for which the browser is being run.
+     */
+    public abstract String getDriverName();
 
-    public void setEnvName(String envName) {
-        this.envName = envName;
-    }
+    /**
+     * Returns the path where reports shall be saved.
+     */
+    public abstract String getReportPath();
 
-    public String getEnvURL() {
-        return envURL;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
 
-    public void setEnvURL(String envURL) {
-        this.envURL = envURL;
-    }
+        public abstract Builder setEnvURL(String envURL);
 
-    public String getDataPath() {
-        return dataPath;
-    }
+        public abstract Builder setDataPath(String dataPath);
 
-    public void setDataPath(String dataPath) {
-        this.dataPath = dataPath;
-    }
+        public abstract Builder setStoryFile(String storyFile);
 
-    public String getStoryFile() {
-        return storyFile;
-    }
+        public abstract Builder setBrowser(String browser);
 
-    public void setStoryFile(String storyFile) {
-        this.storyFile = storyFile;
-    }
+        public abstract Builder setDriverName(String driverName);
 
-    public String getBrowser() {
-        return browser;
-    }
+        public abstract Builder setReportPath(String reportPath);
 
-    public void setBrowser(String browser) {
-        this.browser = browser;
-    }
+        public abstract Builder setIncludeTags(List<String> includeTags);
 
-    public List<String> getIncludeTag() {
-        if (this.tags == null) {
-            this.tags = new ArrayList<>();
-        }
-        return tags;
-    }
-
-    public String getDriverName() {
-        return driverName;
-    }
-
-    public void setDriverName(String driverName) {
-        this.driverName = driverName;
-    }
-
-    public String getReportPath() {
-        return reportPath;
-    }
-
-    public void setReportPath(String reportPath) {
-        this.reportPath = reportPath;
-    }
-
-    public void override(InputStream localIs) throws IOException {
-        Properties props = new Properties();
-        props.load(localIs);
-
-        String aEnvName = props.getProperty("local.name");
-        String aEnvUrl = props.getProperty("local.url");
-        String aDataPath = props.getProperty("local.data");
-        String aBrowser = props.getProperty("local.browser");
-        String includeTags = props.getProperty("local.tags");
-        String aStoryFile = props.getProperty("local.story");
-        String driverName = props.getProperty("local.driver");
-
-
-        this.envName = aEnvName != null && !aEnvName.isEmpty() ? aEnvName
-                : this.envName;
-        this.envURL = aEnvUrl != null && !aEnvUrl.isEmpty() ? aEnvUrl
-                : this.envURL;
-        this.dataPath = aDataPath != null && !aDataPath.isEmpty() ? aDataPath
-                : this.dataPath;
-        this.browser = aBrowser != null && !aBrowser.isEmpty() ? aBrowser
-                : this.browser;
-        this.storyFile = aStoryFile != null && !aStoryFile.isEmpty()
-                ? aStoryFile
-                : this.storyFile;
-        this.tags = includeTags != null && !includeTags.isEmpty() ?
-                Arrays.asList(includeTags.split(","))
-                : this.tags;
-        this.driverName = driverName != null && !driverName.isEmpty()
-                ? driverName
-                : this.driverName;
-
-        logger.info("User Provided : OurProperties [envName=" +
-                aEnvName + ", envURL=" + aEnvUrl
-                + ", dataPath=" + aDataPath + ", storyFile=" +
-                aStoryFile
-                + ", tags=" + includeTags + ", aBrowser=" + aBrowser +
-                ", driverName="
-                + driverName);
-
-    }
-
-    @Override
-    public String toString() {
-        return "OurProperties [envName=" + envName + ", envURL=" + envURL
-                + ", dataPath=" + dataPath + ", storyFile=" + storyFile
-                + ", tags=" + tags + ", browser=" + browser + ", driverName="
-                + driverName;
+        public abstract OurProperties build();
     }
 
 }
