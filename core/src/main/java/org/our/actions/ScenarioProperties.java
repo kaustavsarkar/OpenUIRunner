@@ -1,70 +1,33 @@
 package org.our.actions;
 
+import com.google.auto.value.AutoValue;
 import org.jbehave.core.model.Scenario;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
-public class ScenarioProperties extends Scenario {
-    private static final Logger logger =
-            LoggerFactory.getLogger(ScenarioProperties.class);
-    private Map<String, String> data;
+@AutoValue
+public abstract class ScenarioProperties {
 
-    public static ScenarioProperties cloneFromParent(Scenario scenario) {
-        ScenarioProperties scenarioProp = new ScenarioProperties();
+    public abstract Map<String, String> getData();
 
-        Field[] fields = scenario.getClass().getDeclaredFields();
+    public abstract Scenario getScenario();
 
-        Arrays.stream(fields).forEach(field -> {
-            field.setAccessible(true);
-            try {
-                Field storyField = scenarioProp.getClass()
-                        .getDeclaredField(field.getName());
-                storyField.setAccessible(true);
-                storyField.set(scenarioProp, field.get(scenario));
-            } catch (NoSuchFieldException e) {
-                logger.warn("Field not found, though present in Scenario. " +
-                        field.getName());
-                logger.info("Checking in Parent: " + scenario.getClass());
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder setScenario(Scenario scenario);
 
-                try {
-                    Field parentField = scenarioProp.getClass().getSuperclass()
-                            .getDeclaredField(field.getName());
-                    parentField.setAccessible(true);
-                    parentField.set(scenarioProp, field.get(scenario));
-                } catch (NoSuchFieldException ex) {
-                    logger.warn(
-                            "Field not found in Scenario Class either. Check if it still extends Scenario");
-                } catch (IllegalAccessException ex) {
-                    logger.error("Field is not accessible in Parent. " +
-                            "Corresponding Field name: " + field.getName());
-                }
+        abstract Map<String, String> getData();
 
-            } catch (IllegalAccessException e) {
-                logger.error("Field is not accessible in Parent. " +
-                        "Corresponding Field name: " + field.getName());
-            }
-        });
+        public abstract Builder setData(Map<String, String> data);
 
+        abstract ScenarioProperties autoBuild();
 
-        return scenarioProp;
-    }
-
-    public Map<String, String> getData() {
-        if (this.data == null) {
-            this.data = new HashMap<>();
+        public ScenarioProperties build() {
+            Map<String, String> immutableData =
+                    Collections.unmodifiableMap(getData());
+            setData(immutableData);
+            return autoBuild();
         }
-        return this.data;
-    }
-
-    @Override
-    public String toString() {
-        return "ScenarioProperties{" +
-                "data=" + data +
-                "} " + super.toString();
     }
 }
