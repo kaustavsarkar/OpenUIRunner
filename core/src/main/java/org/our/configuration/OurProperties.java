@@ -1,7 +1,6 @@
-package org.our.actions;
+package org.our.configuration;
 
 import com.google.auto.value.AutoValue;
-import org.our.configuration.OurConfiguration;
 
 import java.util.Collections;
 import java.util.List;

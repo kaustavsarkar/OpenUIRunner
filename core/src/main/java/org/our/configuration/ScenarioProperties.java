@@ -1,4 +1,4 @@
-package org.our.actions;
+package org.our.configuration;
 
 import com.google.auto.value.AutoValue;
 import org.jbehave.core.model.Scenario;
