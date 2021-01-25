@@ -2,6 +2,7 @@ package org.our.actions;
 
 import com.google.auto.value.AutoValue;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -37,10 +38,19 @@ public abstract class StoryProperties {
     public abstract static class Builder {
         public abstract Builder setStoryName(String storyName);
 
-        public abstract Builder setScenarios(Set<ScenarioProperties> scenarios);
-
         public abstract Builder setOurProperties(OurProperties ourProperties);
 
-        public abstract StoryProperties build();
+        abstract Set<ScenarioProperties> getScenarios();
+
+        public abstract Builder setScenarios(Set<ScenarioProperties> scenarios);
+
+        abstract StoryProperties autoBuild();
+
+        public StoryProperties build() {
+            Set<ScenarioProperties> immutableScenarios =
+                    Collections.unmodifiableSet(getScenarios());
+            setScenarios(immutableScenarios);
+            return autoBuild();
+        }
     }
 }

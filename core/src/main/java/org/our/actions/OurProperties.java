@@ -3,6 +3,7 @@ package org.our.actions;
 import com.google.auto.value.AutoValue;
 import org.our.configuration.OurConfiguration;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,9 +70,18 @@ public abstract class OurProperties {
 
         public abstract Builder setReportPath(String reportPath);
 
+        abstract List<String> getIncludeTags();
+
         public abstract Builder setIncludeTags(List<String> includeTags);
 
-        public abstract OurProperties build();
+        abstract OurProperties autoBuild();
+
+        public OurProperties build() {
+            List<String> immutableIncludeTags =
+                    Collections.unmodifiableList(getIncludeTags());
+            setIncludeTags(immutableIncludeTags);
+            return autoBuild();
+        }
     }
 
 }
