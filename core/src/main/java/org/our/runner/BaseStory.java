@@ -1,7 +1,7 @@
 package org.our.runner;
 
-import org.our.actions.BaseAction;
-import org.our.actions.OurProperties;
+import com.google.inject.Inject;
+import org.jbehave.core.ConfigurableEmbedder;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
@@ -15,6 +15,9 @@ import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StepFailureDecorator;
 import org.jbehave.core.reporters.SurefireReporter;
 import org.jbehave.core.steps.InjectableStepsFactory;
+import org.our.actions.BaseAction;
+import org.our.configuration.OurConfiguration;
+import org.our.configuration.OurProperties;
 import org.our.runner.stepfactory.CustomStepFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +25,19 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseStory extends JUnitStories {
+public class BaseStory extends ConfigurableEmbedder {
     private static final Logger logger =
             LoggerFactory.getLogger(BaseStory.class);
     private final OurProperties ourProperties;
+    private final OurConfiguration ourConfiguration;
     protected Configuration configuration;
 
-    public BaseStory() {
+    @Inject
+    public BaseStory(OurProperties ourProperties,
+                     OurConfiguration ourConfiguration) {
         logger.debug("entered constructor");
-        this.ourProperties = OurContext.getProperties();
+        this.ourProperties = ourProperties;
+        this.ourConfiguration = ourConfiguration;
 
         logger.info("Properties: " + this.ourProperties.toString());
     }
@@ -65,7 +72,7 @@ public class BaseStory extends JUnitStories {
     }
 
     @Override
-    public void run() throws Throwable {
+    public void run() {
         logger.debug("Thread Name: " +
                 Thread.currentThread().getName());
         logger.debug("entered run()");
@@ -73,9 +80,9 @@ public class BaseStory extends JUnitStories {
         Embedder embedder = configuredEmbedder();
         try {
             logger.info("Include Tags : " +
-                    ourProperties.getIncludeTag());
+                    ourProperties.getIncludeTags());
             embedder.useMetaFilters(
-                    ourProperties.getIncludeTag());
+                    ourProperties.getIncludeTags());
             embedder.useEmbedderControls(new EmbedderControls()
                     .doIgnoreFailureInStories(true).useThreads(1)
                     .doIgnoreFailureInView(true)
@@ -129,7 +136,7 @@ public class BaseStory extends JUnitStories {
                 new CustomStepFactory(
                         this.configuration,
                         BaseAction.class,
-                        OurContext.get(),
+                        ourConfiguration,
                         configuration.storyReporterBuilder()
                 );
         return stepsFactory;

@@ -1,8 +1,10 @@
 package org.our;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.openqa.selenium.WebDriver;
 import org.our.configuration.OurConfiguration;
 import org.our.runner.BaseStory;
-import org.our.runner.OurContext;
 
 /**
  * Handles execution of stories and web driver code.
@@ -23,20 +25,22 @@ public class OurConfiguredRunner {
      */
     public void executeWithConfig(OurConfiguration ourConfiguration)
             throws Throwable {
-
         try {
             if (ourConfiguration == null) {
                 throw new Exception(
                         "You need to provide your own Configuration.");
             }
 
-            OurContext.initialize();
-            OurContext.set(ourConfiguration);
-
-            BaseStory story = new BaseStory();
+            Injector injector = Guice.createInjector(new OurBaseModule());
+            injector.injectMembers(ourConfiguration);
+            BaseStory story = injector.getInstance(BaseStory.class);
             story.run();
         } finally {
-            OurContext.destroy();
+            if (ourConfiguration != null) {
+                WebDriver webDriver = ourConfiguration.getWebDriver();
+                webDriver.close();
+                webDriver.quit();
+            }
         }
 
     }
