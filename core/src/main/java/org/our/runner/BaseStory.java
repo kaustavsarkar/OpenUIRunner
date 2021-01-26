@@ -131,13 +131,11 @@ public class BaseStory extends ConfigurableEmbedder {
     @Override
     public InjectableStepsFactory stepsFactory() {
         logger.debug("entered stepsFactory()");
-        InjectableStepsFactory stepsFactory =
-                new CustomStepFactory(
-                        this.configuration,
-                        BaseAction.class,
-                        ourConfiguration,
-                        configuration.storyReporterBuilder()
-                );
-        return stepsFactory;
+        return new CustomStepFactory(
+                this.configuration,
+                BaseAction.class,
+                ourConfiguration,
+                configuration.storyReporterBuilder()
+        );
     }
 }
