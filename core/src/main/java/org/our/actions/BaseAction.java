@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BaseAction extends Steps {
-
-    private static final String CLASSNAME = BaseAction.class.getSimpleName();
     private static final Logger logger =
             LoggerFactory.getLogger(BaseAction.class);
 

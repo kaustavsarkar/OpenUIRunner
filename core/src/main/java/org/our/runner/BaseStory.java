@@ -9,7 +9,6 @@ import org.jbehave.core.embedder.EmbedderControls;
 import org.jbehave.core.io.CodeLocations;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
-import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.CrossReference;
 import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StepFailureDecorator;
