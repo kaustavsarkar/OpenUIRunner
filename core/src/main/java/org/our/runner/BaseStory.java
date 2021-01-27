@@ -1,21 +1,12 @@
 package org.our.runner;
 
-import com.google.inject.Inject;
 import org.jbehave.core.ConfigurableEmbedder;
 import org.jbehave.core.configuration.Configuration;
-import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.embedder.EmbedderControls;
 import org.jbehave.core.io.CodeLocations;
-import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
-import org.jbehave.core.reporters.CrossReference;
-import org.jbehave.core.reporters.Format;
-import org.jbehave.core.reporters.StepFailureDecorator;
-import org.jbehave.core.reporters.SurefireReporter;
 import org.jbehave.core.steps.InjectableStepsFactory;
-import org.our.actions.BaseAction;
-import org.our.configuration.OurConfiguration;
 import org.our.configuration.OurProperties;
 import org.our.runner.stepfactory.CustomStepFactory;
 import org.slf4j.Logger;
@@ -28,15 +19,16 @@ public class BaseStory extends ConfigurableEmbedder {
     private static final Logger logger =
             LoggerFactory.getLogger(BaseStory.class);
     private final OurProperties ourProperties;
-    private final OurConfiguration ourConfiguration;
+    private final CustomStepFactory customStepFactory;
     protected Configuration configuration;
 
-    @Inject
-    public BaseStory(OurProperties ourProperties,
-                     OurConfiguration ourConfiguration) {
+    BaseStory(OurProperties ourProperties,
+              Configuration configuration,
+              CustomStepFactory customStepFactory) {
         logger.debug("entered constructor");
         this.ourProperties = ourProperties;
-        this.ourConfiguration = ourConfiguration;
+        this.configuration = configuration;
+        this.customStepFactory = customStepFactory;
 
         logger.info("Properties: " + this.ourProperties.toString());
     }
@@ -44,29 +36,6 @@ public class BaseStory extends ConfigurableEmbedder {
     @Override
     public Configuration configuration() {
         logger.debug("entered configuration");
-        SurefireReporter surefireReporter = new SurefireReporter(
-                this.getClass(),
-                new SurefireReporter.Options("our-surefire",
-                        SurefireReporter.Options.DEFAULT_NAMING_STRATEGY, true,
-                        true));
-
-        CrossReference crossReference = new CrossReference();
-        Format[] formats =
-                new Format[]{Format.HTML, Format.JSON, Format.XML, Format.TXT,
-                        Format.STATS};
-        configuration = new MostUsefulConfiguration()
-                .useStoryLoader(new LoadFromClasspath(BaseAction.class))
-                .useStoryReporterBuilder(
-                        new OurStoryReportBuilder()
-                                .withOutReportDirectory(
-                                        this.ourProperties.getReportPath())
-                                .withFormats(formats)
-                                .withReporters(new StepFailureDecorator(
-                                        new OurStoryReporter()))
-                                .withFailureTrace(true)
-                                .withSurefireReporter(surefireReporter)
-                                .withCrossReference(crossReference));
-
         return configuration;
     }
 
@@ -131,11 +100,6 @@ public class BaseStory extends ConfigurableEmbedder {
     @Override
     public InjectableStepsFactory stepsFactory() {
         logger.debug("entered stepsFactory()");
-        return new CustomStepFactory(
-                this.configuration,
-                BaseAction.class,
-                ourConfiguration,
-                configuration.storyReporterBuilder()
-        );
+        return customStepFactory;
     }
 }
