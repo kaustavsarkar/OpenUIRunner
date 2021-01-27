@@ -41,7 +41,7 @@
         <!-- https://mvnrepository.com/artifact/org.jbehave/jbehave-core -->
         <dependency>
             <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-guice</artifactId>
+            <artifactId>jbehave-core</artifactId>
             <version>4.8.3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
