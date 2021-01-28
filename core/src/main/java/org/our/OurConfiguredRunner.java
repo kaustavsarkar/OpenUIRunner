@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.our.configuration.OurConfiguration;
 import org.our.runner.BaseStory;
 import org.our.runner.OurRunnerModule;
-import org.our.runner.stepfactory.CustomStepFactory;
 
 /**
  * Handles execution of stories and web driver code.
