@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.our.configuration.OurConfiguration;
 import org.our.configuration.OurProperties;
 import org.our.runner.stepfactory.CustomStepFactory;
+import org.our.selenium.webdriver.WebDriverProvider;
 
 /**
  * Provides objects to be used by the instance of {@link BaseStory} being
@@ -136,6 +137,22 @@ public class OurRunnerModule extends AbstractModule {
     @Singleton
     WebDriver provideWebDriver(OurConfiguration ourConfiguration) {
         return ourConfiguration.getWebDriver();
+    }
+
+    /**
+     * Provides an instance of {@link WebDriver} to be used in action classes.
+     * <p>
+     * The provided instance needs to be singleton to avoid multiple instances
+     * being created.
+     *
+     * @param ourConfiguration - object being injected by the parent injector
+     *                         inside {@link org.our.OurConfiguredRunner}.
+     */
+    @Provides
+    @Singleton
+    WebDriverProvider provideWebDriverProvider(
+            OurConfiguration ourConfiguration) {
+        return ourConfiguration.getWebDriverProvider();
     }
 
 }
