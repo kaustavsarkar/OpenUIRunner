@@ -1,7 +1,6 @@
 package org.our.configuration;
 
 import com.google.auto.value.AutoValue;
-import org.our.actions.AutoValue_StoryProperties;
 
 import java.util.Collections;
 import java.util.Set;
