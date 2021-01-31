@@ -3,26 +3,30 @@ package org.our;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import org.jbehave.core.configuration.Configuration;
-import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryLoader;
-import org.jbehave.core.reporters.*;
+import org.jbehave.core.reporters.CrossReference;
+import org.jbehave.core.reporters.SurefireReporter;
 import org.jbehave.core.steps.Steps;
 import org.our.actions.BaseAction;
 import org.our.configuration.OurConfiguration;
 import org.our.configuration.OurProperties;
-import org.our.runner.OurStoryReportBuilder;
-import org.our.runner.OurStoryReporter;
 
 import java.util.ArrayList;
 
+/**
+ * Provides the objects which are to be used by the application across the
+ * application. The {@link com.google.inject.Injector} used to create the module
+ * is the parent injector.
+ */
 public class OurBaseModule extends AbstractModule {
 
-    private static final Format[] formats =
-            new Format[]{Format.HTML, Format.JSON, Format.XML, Format.TXT,
-                    Format.STATS};
-
+    /**
+     * Provides {@link OurProperties} created using {@link OurConfiguration}
+     * being provided by the client while running the application. This object
+     * shall be used across the application to refer the configuration
+     * requirements provided by the client.
+     */
     @Provides
     @Singleton
     OurProperties provideOurProperties(OurConfiguration ourConfiguration) {
@@ -38,6 +42,12 @@ public class OurBaseModule extends AbstractModule {
                 .build();
     }
 
+    /**
+     * Provides the object of {@link SurefireReporter} to be used by jbehave for
+     * creating reports. This is used while creating an object of {@link
+     * org.jbehave.core.reporters.StoryReporterBuilder} in {@link
+     * org.our.runner.OurRunnerModule}.
+     */
     @Provides
     SurefireReporter provideSurefireReporter() {
         return new SurefireReporter(
@@ -47,50 +57,39 @@ public class OurBaseModule extends AbstractModule {
                         true));
     }
 
+    /**
+     * Provides an answer for {@link StoryLoader}.
+     * <p>
+     * The object shall be available across the application. This is used for
+     * creating an object of {@link org.jbehave.core.configuration.Configuration}
+     * in {@link org.our.runner.OurRunnerModule}.
+     */
     @Provides
     StoryLoader provideStoryLoader(Class<? extends Steps> rootClass) {
         return new LoadFromClasspath(rootClass);
     }
 
-    @Provides
-    StepFailureDecorator provideStepFailureDecorator() {
-        return new StepFailureDecorator(
-                new OurStoryReporter());
-    }
-
-    @Provides
-    @Singleton
-    Configuration provideJbehaveConfiguration(
-            StoryLoader storyLoader,
-            OurStoryReportBuilder reportBuilder) {
-
-        return new MostUsefulConfiguration()
-                .useStoryLoader(storyLoader)
-                .useStoryReporterBuilder(reportBuilder);
-    }
-
+    /**
+     * Provides the root action class which shall be used to scan other action
+     * classes which are present inside the same package or sub-packages.
+     */
+    // TODO(kaustav): Get the base action from the user. So that the users
+    //  may provide a different package structure than what is being used in
+    //  this application.
     @Provides
     Class<? extends Steps> provideRootAction() {
         return BaseAction.class;
     }
 
+    /**
+     * Provide an object of {@link CrossReference}.
+     * <p>
+     * The object is used for building an object of {@link
+     * org.jbehave.core.reporters.StoryReporterBuilder} in {@link
+     * org.our.runner.OurRunnerModule}.
+     */
     @Provides
     CrossReference provideCrossReference() {
         return new CrossReference();
-    }
-
-    @Provides
-    StoryReporterBuilder provideStoryReportBuilder(OurProperties ourProperties,
-                                                   SurefireReporter surefireReporter,
-                                                   CrossReference crossReference,
-                                                   StepFailureDecorator stepFailureDecorator) {
-        return new OurStoryReportBuilder()
-                .withOutReportDirectory(
-                        ourProperties.getReportPath())
-                .withFormats(formats)
-                .withReporters(stepFailureDecorator)
-                .withFailureTrace(true)
-                .withSurefireReporter(surefireReporter)
-                .withCrossReference(crossReference);
     }
 }
