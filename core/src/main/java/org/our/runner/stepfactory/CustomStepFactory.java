@@ -21,13 +21,11 @@ public class CustomStepFactory extends ScanningStepsFactory {
 
     @Override
     public Object createInstanceOfType(Class<?> type) {
-        Object instance;
         try {
-            instance = injector.getInstance(type);
+            return injector.getInstance(type);
         } catch (Exception e) {
             logger.error("Failed while creating instance of Actions", e);
             throw new StepsInstanceNotFound(type, this);
         }
-        return instance;
     }
 }
