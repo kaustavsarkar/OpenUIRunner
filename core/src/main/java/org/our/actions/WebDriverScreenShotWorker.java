@@ -1,6 +1,7 @@
 package org.our.actions;
 
 
+import com.google.inject.Inject;
 import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.failures.PendingStepFound;
 import org.jbehave.core.failures.UUIDExceptionWrapper;
@@ -46,6 +47,7 @@ public class WebDriverScreenShotWorker extends Steps {
      *                             org.our.runner.OurStoryReporter} using child
      *                             injector inside {@link org.our.runner.OurStoryReporter#beforeScenario(Scenario)}
      */
+    @Inject
     WebDriverScreenShotWorker(WebDriverProvider driverProvider,
                               StoryReporterBuilder storyReporterBuilder,
                               ScenarioProperties scenarioProperties) {
