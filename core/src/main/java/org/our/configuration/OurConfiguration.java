@@ -176,6 +176,7 @@ public abstract class OurConfiguration {
                 driverProvider = driverProvider.createProvider(getDriverName());
             }
             setWebDriverProvider(driverProvider);
+            setWebDriver(driverProvider.get());
             return autoBuild();
         }
     }
