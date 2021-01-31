@@ -9,9 +9,6 @@ import org.our.runner.OurRunnerModule;
 
 /**
  * Handles execution of stories and web driver code.
- *
- * @author: Kaustav Sarkar
- * @created: 5/20/2019
  */
 public class OurConfiguredRunner {
 
