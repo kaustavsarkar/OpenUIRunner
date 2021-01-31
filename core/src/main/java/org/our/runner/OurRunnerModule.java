@@ -9,6 +9,8 @@ import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.io.StoryLoader;
 import org.jbehave.core.reporters.*;
 import org.jbehave.core.steps.Steps;
+import org.openqa.selenium.WebDriver;
+import org.our.configuration.OurConfiguration;
 import org.our.configuration.OurProperties;
 import org.our.runner.stepfactory.CustomStepFactory;
 
@@ -119,6 +121,21 @@ public class OurRunnerModule extends AbstractModule {
     @Singleton
     OurStoryReporter provideOurStoryReporter(OurProperties ourProperties) {
         return new OurStoryReporter(injector, ourProperties);
+    }
+
+    /**
+     * Provides an instance of {@link WebDriver} to be used in action classes.
+     * <p>
+     * The provided instance needs to be singleton so that it can be quit and
+     * closed once the testing is completed.
+     *
+     * @param ourConfiguration - object being injected by the parent injector
+     *                         inside {@link org.our.OurConfiguredRunner}.
+     */
+    @Provides
+    @Singleton
+    WebDriver provideWebDriver(OurConfiguration ourConfiguration) {
+        return ourConfiguration.getWebDriver();
     }
 
 }
