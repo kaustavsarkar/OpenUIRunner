@@ -20,6 +20,16 @@ import java.util.ArrayList;
  * is the parent injector.
  */
 public class OurBaseModule extends AbstractModule {
+    private final OurConfiguration ourConfiguration;
+
+    OurBaseModule(OurConfiguration ourConfiguration) {
+        this.ourConfiguration = ourConfiguration;
+    }
+
+    @Override
+    protected void configure() {
+        bind(OurConfiguration.class).toInstance(ourConfiguration);
+    }
 
     /**
      * Provides {@link OurProperties} created using {@link OurConfiguration}
