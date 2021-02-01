@@ -1,5 +1,6 @@
 package org.our.runner;
 
+import com.google.inject.Inject;
 import org.jbehave.core.ConfigurableEmbedder;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.embedder.Embedder;
@@ -22,6 +23,7 @@ public class BaseStory extends ConfigurableEmbedder {
     private final CustomStepFactory customStepFactory;
     protected Configuration configuration;
 
+    @Inject
     BaseStory(OurProperties ourProperties,
               Configuration configuration,
               CustomStepFactory customStepFactory) {
