@@ -10,21 +10,23 @@ import org.slf4j.LoggerFactory;
 public class CustomStepFactory extends ScanningStepsFactory {
     private static final Logger logger =
             LoggerFactory.getLogger(CustomStepFactory.class);
-    private final Injector injector;
+    private final Injector childInjector;
 
     public CustomStepFactory(Configuration configuration,
                              Class<? extends Steps> root,
                              Injector injector) {
         super(configuration, root);
-        this.injector = injector;
+        this.childInjector = injector;
     }
 
     @Override
     public Object createInstanceOfType(Class<?> type) {
+        logger.info("Creating instance of " + type);
         try {
-            return injector.getInstance(type);
+            return childInjector.getInstance(type);
         } catch (Exception e) {
             logger.error("Failed while creating instance of Actions", e);
+            logger.error(childInjector.getAllBindings().toString());
             throw new StepsInstanceNotFound(type, this);
         }
     }
