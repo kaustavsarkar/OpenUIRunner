@@ -1,12 +1,9 @@
-package org.our;
+package org.our.runner;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.openqa.selenium.WebDriver;
 import org.our.configuration.OurConfiguration;
-import org.our.runner.BaseStory;
-import org.our.runner.OurReportModule;
-import org.our.runner.OurRunnerModule;
 
 /**
  * Handles execution of stories and web driver code.
@@ -33,13 +30,8 @@ public class OurConfiguredRunner {
             Injector injector =
                     Guice.createInjector(new OurBaseModule(ourConfiguration));
             Injector childInjector =
-                    injector.createChildInjector(new OurReportModule(injector));
-
-
-            Injector granChildInjector =
-                    childInjector.createChildInjector(
-                            new OurRunnerModule(childInjector));
-            BaseStory story = granChildInjector.getInstance(BaseStory.class);
+                    injector.createChildInjector(new OurRunnerModule(injector));
+            BaseStory story = childInjector.getInstance(BaseStory.class);
             story.run();
         } finally {
             if (ourConfiguration != null) {
