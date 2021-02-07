@@ -127,16 +127,6 @@ public abstract class OurConfiguration {
         public abstract Builder setLaunchUrl(String launchUrl);
 
         /**
-         * Sets the path where the data shall be found. The data needs to be
-         * stored inside the resources/data/ folder. The method assumes this
-         * shall be the base path for the data files. Client may add further
-         * nested folders for storing data for different test cases.
-         *
-         * @param relDataPath - data path relative to /resources/data.
-         */
-        public abstract Builder setRelDataPath(String relDataPath);
-
-        /**
          * // TODO(kaustav): Add some doc here.
          *
          * @param storyRegex
@@ -146,8 +136,6 @@ public abstract class OurConfiguration {
 
         public abstract Builder setIncludeTags(
                 Optional<List<String>> includeTags);
-
-        public abstract Builder setWebDriverPath(String webDriverPath);
 
         /**
          * Sets the path in the file system where the reports are required to be
@@ -164,9 +152,27 @@ public abstract class OurConfiguration {
          */
         public abstract Builder setDriverName(DriverName driverName);
 
+        abstract String getWebDriverPath();
+
+        public abstract Builder setWebDriverPath(String webDriverPath);
+
+        /**
+         * Sets the path where the data shall be found. The data needs to be
+         * stored inside the resources/data/ folder. The method assumes this
+         * shall be the base path for the data files. Client may add further
+         * nested folders for storing data for different test cases.
+         *
+         * @param relDataPath - data path relative to /resources/data.
+         */
+        public abstract Builder setRelDataPath(String relDataPath);
+
         abstract OurConfiguration autoBuild();
 
         public OurConfiguration build() {
+            System.setProperty(
+                    getDriverName().getPropertyKey(),
+                    getWebDriverPath() +
+                            getDriverName().getDriverName());
             CustomWebDriverProvider driverProvider =
                     new CustomWebDriverProvider();
             if (getDriverName() == null) {
