@@ -1,13 +1,13 @@
 package org.our.actions;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.steps.Steps;
 import org.openqa.selenium.WebDriver;
 import org.our.configuration.OurProperties;
 import org.our.configuration.ScenarioProperties;
-import org.our.configuration.ScenarioPropertiesProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class BaseAction extends Steps {
     @Inject
     public BaseAction(WebDriver driver,
                       OurProperties ourProperties,
-                      ScenarioPropertiesProvider scenarioPropertiesProvider) {
+                      Provider<ScenarioProperties> scenarioPropertiesProvider) {
         logger.debug("inside constructor");
         logger.info("Thread name: " + Thread.currentThread().getName());
 

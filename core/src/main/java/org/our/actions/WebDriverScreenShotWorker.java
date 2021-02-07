@@ -12,7 +12,6 @@ import org.jbehave.core.steps.Steps;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.our.configuration.ScenarioProperties;
-import org.our.configuration.ScenarioPropertiesProvider;
 import org.our.selenium.webdriver.WebDriverProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +52,7 @@ public class WebDriverScreenShotWorker extends Steps {
     @Inject
     WebDriverScreenShotWorker(WebDriverProvider driverProvider,
                               StoryReporterBuilder storyReporterBuilder,
-                              ScenarioPropertiesProvider scenarioProperties) {
+                              Provider<ScenarioProperties> scenarioProperties) {
         logger.debug("inside constructor");
         this.driverProvider = driverProvider;
         this.driver = driverProvider.get();

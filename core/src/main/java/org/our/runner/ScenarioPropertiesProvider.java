@@ -1,10 +1,11 @@
-package org.our.configuration;
+package org.our.runner;
 
 import com.google.inject.Provider;
+import org.our.configuration.ScenarioProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ScenarioPropertiesProvider
+class ScenarioPropertiesProvider
         implements Provider<ScenarioProperties> {
     private static final Logger logger =
             LoggerFactory.getLogger(ScenarioPropertiesProvider.class);

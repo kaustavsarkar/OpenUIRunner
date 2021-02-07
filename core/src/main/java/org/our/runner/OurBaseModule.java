@@ -13,7 +13,6 @@ import org.our.actions.BaseAction;
 import org.our.configuration.OurConfiguration;
 import org.our.configuration.OurProperties;
 import org.our.configuration.ScenarioProperties;
-import org.our.configuration.ScenarioPropertiesProvider;
 import org.our.selenium.webdriver.WebDriverProvider;
 
 import java.util.ArrayList;
