@@ -9,6 +9,7 @@ import org.jbehave.core.model.Story;
 import org.jbehave.core.reporters.NullStoryReporter;
 import org.our.configuration.OurProperties;
 import org.our.configuration.ScenarioProperties;
+import org.our.configuration.ScenarioPropertiesProvider;
 import org.our.configuration.StoryProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +33,8 @@ import static java.util.stream.Collectors.toSet;
 public class OurStoryReporter extends NullStoryReporter {
     private static final Logger logger =
             LoggerFactory.getLogger(OurStoryReporter.class);
-    private final Injector injector;
     private final OurProperties ourProperties;
+    private final ScenarioPropertiesProvider scenarioPropertyProvider;
     private String scenarioName;
     private String storyName;
     private StoryProperties storyProperties;
@@ -42,8 +43,9 @@ public class OurStoryReporter extends NullStoryReporter {
     /**
      * Object created inside {@link OurRunnerModule}.
      */
-    OurStoryReporter(Injector injector, OurProperties ourProperties) {
-        this.injector = injector;
+    OurStoryReporter(ScenarioPropertiesProvider scenarioPropertiesProvider,
+                     OurProperties ourProperties) {
+        this.scenarioPropertyProvider = scenarioPropertiesProvider;
         this.ourProperties = ourProperties;
     }
 
@@ -166,20 +168,21 @@ public class OurStoryReporter extends NullStoryReporter {
      */
     @Override
     public void beforeScenario(Scenario scenario) {
-        this.scenarioName = scenario.getTitle();
-        logger.debug("Inside beforeScenario " + this.scenarioName);
+        scenarioName = scenario.getTitle();
+        logger.debug("Inside beforeScenario " + scenarioName);
 
         //Read data for all scenarios in this story
         ScenarioProperties scenarioProperties =
-                this.storyProperties.getScenarios().stream()
-                        .filter(scenarioProperty -> scenarioProperty
-                                .getScenario().getTitle().trim()
-                                .equals(this.scenarioName)).findFirst()
-                        .orElse(ScenarioProperties.newBuilder().build());
-
+                storyProperties.getScenarios().stream()
+                        .filter(scenarioProperty -> {
+                            logger.debug(scenarioProperty
+                                    .getScenario().getTitle());
+                            return scenarioProperty
+                                    .getScenario().getTitle().trim()
+                                    .equals(scenarioName);
+                        }).findFirst().get();
         // TODO(kaustav): Make it accessible inside the concerned thread.
-        injector.injectMembers(scenarioProperties);
-
+        scenarioPropertyProvider.set(scenarioProperties);
     }
 
     /**
