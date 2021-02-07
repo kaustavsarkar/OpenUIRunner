@@ -1,0 +1,3 @@
+org/our/example/OURTestRunner.class
+org/our/actions/TestGoogleAction.class
+org/our/example/pages/google/SearchGooglePage.class
