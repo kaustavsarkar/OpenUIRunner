@@ -2,6 +2,7 @@ package org.our.actions;
 
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.failures.PendingStepFound;
 import org.jbehave.core.failures.UUIDExceptionWrapper;
@@ -11,6 +12,7 @@ import org.jbehave.core.steps.Steps;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.our.configuration.ScenarioProperties;
+import org.our.configuration.ScenarioPropertiesProvider;
 import org.our.selenium.webdriver.WebDriverProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,8 @@ public class WebDriverScreenShotWorker extends Steps {
             LoggerFactory.getLogger(WebDriverScreenShotWorker.class);
     protected final StoryReporterBuilder reporterBuilder;
     private final WebDriver driver;
-    private final String storyName;
+
+    private final Provider<ScenarioProperties> scenarioProperties;
     protected WebDriverProvider driverProvider;
 
     /**
@@ -50,12 +53,12 @@ public class WebDriverScreenShotWorker extends Steps {
     @Inject
     WebDriverScreenShotWorker(WebDriverProvider driverProvider,
                               StoryReporterBuilder storyReporterBuilder,
-                              ScenarioProperties scenarioProperties) {
+                              ScenarioPropertiesProvider scenarioProperties) {
         logger.debug("inside constructor");
         this.driverProvider = driverProvider;
         this.driver = driverProvider.get();
         this.reporterBuilder = storyReporterBuilder;
-        this.storyName = scenarioProperties.getStoryName();
+        this.scenarioProperties = scenarioProperties;
     }
 
     /**
@@ -145,17 +148,18 @@ public class WebDriverScreenShotWorker extends Steps {
     protected String sourceCodePath() {
         return MessageFormat.format(DEFAULT_SOURCECODE_PATH_PATTERN,
                 reporterBuilder.outputDirectory(), driver.getTitle(),
-                storyName);
+                scenarioProperties.get().getStoryName());
     }
 
     protected String screenshotPath() {
         return MessageFormat.format(DEFAULT_SCREENSHOT_PATH_PATTERN,
                 reporterBuilder.outputDirectory(), driver.getTitle(),
-                storyName);
+                scenarioProperties.get().getStoryName());
     }
 
     protected String screenshotPathFailure(UUID uuid) {
         return MessageFormat.format(DEFAULT_SCREENSHOT_PATH_PATTERN,
-                reporterBuilder.outputDirectory(), uuid, storyName);
+                reporterBuilder.outputDirectory(), uuid,
+                scenarioProperties.get().getStoryName());
     }
 }
