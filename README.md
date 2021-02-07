@@ -3,8 +3,7 @@
 ---
  ***This projects aims to minimise development time for performing Behaviour 
  Driven Development.
- It is a minimal config set-up for running [Selenium](https://www.selenium.
- dev/) with [JBehave](https://jbehave.org/).***
+ It is a minimal config set-up for running [Selenium](https://www.selenium.dev/) with [JBehave](https://jbehave.org/).***
 
 ## Motivation
 
