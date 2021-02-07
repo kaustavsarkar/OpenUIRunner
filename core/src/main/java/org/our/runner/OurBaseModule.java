@@ -1,4 +1,4 @@
-package org.our;
+package org.our.runner;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -14,9 +14,6 @@ import org.our.configuration.OurConfiguration;
 import org.our.configuration.OurProperties;
 import org.our.configuration.ScenarioProperties;
 import org.our.configuration.ScenarioPropertiesProvider;
-import org.our.runner.OurReportModule;
-import org.our.runner.OurStoryReportBuilder;
-import org.our.runner.OurStoryReporter;
 import org.our.selenium.webdriver.WebDriverProvider;
 
 import java.util.ArrayList;
@@ -121,13 +118,13 @@ public class OurBaseModule extends AbstractModule {
      * creating an object of {@link Configuration}.
      *
      * @param ourProperties        - object being provided from {@link
-     *                             org.our.OurBaseModule}.
+     *                             OurBaseModule}.
      * @param surefireReporter     - object being provided from {@link
-     *                             org.our.OurBaseModule}.
+     *                             OurBaseModule}.
      * @param crossReference       - object being provided by {@link
-     *                             org.our.OurBaseModule}.
+     *                             OurBaseModule}.
      * @param stepFailureDecorator - object being provided by {@link
-     *                             OurReportModule}.
+     *                             OurBaseModule}.
      * @return
      */
     @Provides
@@ -150,7 +147,7 @@ public class OurBaseModule extends AbstractModule {
      * an object for {@link StoryReporterBuilder}.
      *
      * @param ourStoryReporter - object being provided by {@link
-     *                         OurReportModule}.
+     *                         OurBaseModule}.
      */
     @Provides
     StepFailureDecorator provideStepFailureDecorator(
@@ -166,7 +163,7 @@ public class OurBaseModule extends AbstractModule {
      * once in the application lifetime.
      *
      * @param ourProperties - object is being provided by {@link
-     *                      org.our.OurBaseModule}.
+     *                      OurBaseModule}.
      */
     @Provides
     @Singleton
@@ -183,7 +180,7 @@ public class OurBaseModule extends AbstractModule {
      * closed once the testing is completed.
      *
      * @param ourConfiguration - object being injected by the parent injector
-     *                         inside {@link org.our.OurConfiguredRunner}.
+     *                         inside {@link OurConfiguredRunner}.
      */
     @Provides
     @Singleton
@@ -198,7 +195,7 @@ public class OurBaseModule extends AbstractModule {
      * being created.
      *
      * @param ourConfiguration - object being injected by the parent injector
-     *                         inside {@link org.our.OurConfiguredRunner}.
+     *                         inside {@link OurConfiguredRunner}.
      */
     @Provides
     @Singleton
