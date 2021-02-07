@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>OpenUIRunner</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <groupId>org.our.core</groupId>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
