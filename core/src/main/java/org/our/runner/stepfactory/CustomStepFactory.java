@@ -4,6 +4,7 @@ import com.google.inject.Injector;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.steps.ScanningStepsFactory;
 import org.jbehave.core.steps.Steps;
+import org.our.actions.BaseAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,8 @@ public class CustomStepFactory extends ScanningStepsFactory {
     public CustomStepFactory(Configuration configuration,
                              Class<? extends Steps> root,
                              Injector injector) {
-        super(configuration, root);
+        super(configuration, root.getPackage().getName(),
+                BaseAction.class.getPackage().getName());
         this.childInjector = injector;
     }
 

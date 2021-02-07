@@ -1,6 +1,7 @@
 package org.our.configuration;
 
 import com.google.auto.value.AutoValue;
+import org.jbehave.core.steps.Steps;
 import org.openqa.selenium.WebDriver;
 import org.our.selenium.webdriver.CustomWebDriverProvider;
 import org.our.selenium.webdriver.WebDriverProvider;
@@ -93,6 +94,13 @@ public abstract class OurConfiguration {
      */
     public abstract String getReportPath();
 
+    /**
+     * Returns the root action class provided by the user. OUR shall be using
+     * the classes present in the same package as the root action class and
+     * all the sub-packages inside it.
+     */
+    public abstract Class<? extends Steps> getRootClass();
+
     @AutoValue.Builder
     public abstract static class Builder {
         /**
@@ -165,6 +173,13 @@ public abstract class OurConfiguration {
          * @param relDataPath - data path relative to /resources/data.
          */
         public abstract Builder setRelDataPath(String relDataPath);
+
+        /**
+         * Sets the path of the root class where all the action classes are
+         * placed. All the actions in the same package and the sub-packages
+         * shall be executed by the OUR.
+         */
+        public abstract Builder setRootClass(Class<? extends Steps> rootClass);
 
         abstract OurConfiguration autoBuild();
 

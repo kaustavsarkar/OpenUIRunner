@@ -1,4 +1,4 @@
-package org.our.actions;
+package org.our.example.actions;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;

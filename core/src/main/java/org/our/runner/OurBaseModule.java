@@ -9,7 +9,6 @@ import org.jbehave.core.io.StoryLoader;
 import org.jbehave.core.reporters.*;
 import org.jbehave.core.steps.Steps;
 import org.openqa.selenium.WebDriver;
-import org.our.actions.BaseAction;
 import org.our.configuration.OurConfiguration;
 import org.our.configuration.OurProperties;
 import org.our.configuration.ScenarioProperties;
@@ -96,7 +95,7 @@ public class OurBaseModule extends AbstractModule {
     //  this application.
     @Provides
     Class<? extends Steps> provideRootAction() {
-        return BaseAction.class;
+        return ourConfiguration.getRootClass();
     }
 
     /**
@@ -124,7 +123,6 @@ public class OurBaseModule extends AbstractModule {
      *                             OurBaseModule}.
      * @param stepFailureDecorator - object being provided by {@link
      *                             OurBaseModule}.
-     * @return
      */
     @Provides
     StoryReporterBuilder provideStoryReportBuilder(OurProperties ourProperties,
