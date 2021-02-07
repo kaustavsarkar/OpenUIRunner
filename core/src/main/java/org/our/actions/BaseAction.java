@@ -5,6 +5,9 @@ import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.steps.Steps;
 import org.openqa.selenium.WebDriver;
+import org.our.configuration.OurProperties;
+import org.our.configuration.ScenarioProperties;
+import org.our.configuration.ScenarioPropertiesProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,20 +21,26 @@ import java.util.concurrent.TimeUnit;
 public class BaseAction extends Steps {
     private static final Logger logger =
             LoggerFactory.getLogger(BaseAction.class);
+    private final OurProperties ourProperties;
+    private final ScenarioProperties scenarioProperties;
 
     protected WebDriver driver;
 
     @Inject
-    public BaseAction(WebDriver driver) {
+    public BaseAction(WebDriver driver,
+                      OurProperties ourProperties,
+                      ScenarioPropertiesProvider scenarioPropertiesProvider) {
         logger.debug("inside constructor");
         logger.info("Thread name: " + Thread.currentThread().getName());
 
         this.driver = driver;
+        this.ourProperties = ourProperties;
+        this.scenarioProperties = scenarioPropertiesProvider.get();
     }
 
     /**
-     * Maximises the driver woindow and adds timeouts to be used by the
-     * {@link WebDriver} while running tests.
+     * Maximises the driver woindow and adds timeouts to be used by the {@link
+     * WebDriver} while running tests.
      */
     @BeforeStory
     public void beforeStory() {
@@ -47,7 +56,10 @@ public class BaseAction extends Steps {
 
     @BeforeScenario
     public void beforeScenario() {
-        logger.debug("inside beforeScenario");
+        logger.info("Launch Url: " + ourProperties.getEnvURL());
+        driver.get(ourProperties.getEnvURL());
+        logger.debug("inside beforeScenario " +
+                scenarioProperties.getScenario().getTitle());
     }
 
 
