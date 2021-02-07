@@ -52,8 +52,30 @@ cases as well, making sure the performance does not suffer.
 - There is no need to have deep knowledge of JBehave in order to use the 
   framework. Just a limited knowledge shall be required.
   
+## Basic Set-up
+
+----
+- Make sure you have at least JDK-8 and Maven installed on the systems.
+  - [Install JDK](https://www.oracle.com/in/java/technologies/javase-downloads.html)
+  - [Install Maven](http://maven.apache.org/install.html)
+- Identify the version of your browser and download relevant drivers.
+  - [Chrome Driver](https://chromedriver.chromium.org/)
+  - [Gecko Driver](https://github.com/mozilla/geckodriver/releases) for Firefox.
+  - [Microsoft Edge](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
+  - [Safari](https://developer.apple.com/documentation/webkit/testing_with_webdriver_in_safari)
+  - [Opera](https://github.com/operasoftware/operachromiumdriver/releases)
+  - [Internet Explorer](https://www.microsoft.com/en-us/download/details.aspx?id=44069)
+- Create a folder to save the driver and reports like `/home/kaustav/OUR`.
+- Run `mvn install`.
+- Add dependency to your project created in the local maven repo. For maven 
+  refer [this](https://github.com/kaustavsarkar/OpenUIRunner/blob/main/google-test/pom.xml).
+- Create a main method to run your tests. [Reference](https://github.com/kaustavsarkar/OpenUIRunner/blob/main/google-test/src/main/java/org/our/example/OURTestRunner.java) .
 ### *In the pipeline*:
-- Add more use case and tests to cover multiple scenarios and cover edge cases.
-- Ask users to provide timeouts.
-- Add defaults to OurConfiguration.
-- Dockerise the framework for it to be used across Operating Systems.
+- [ ] Unit tests.
+- [ ] Test with other drivers as well.
+- [ ]Add more use case and tests to cover multiple scenarios and cover edge 
+  cases.
+- [ ] Ask users to provide timeouts.
+- [ ] Add defaults to OurConfiguration.
+- [ ] Dockerise the framework for it to be used across Operating Systems.
+- [ ] Deployable to Cloud.
