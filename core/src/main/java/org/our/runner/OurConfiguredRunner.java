@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import org.openqa.selenium.WebDriver;
 import org.our.configuration.OurConfiguration;
 import org.our.runner.BaseStory;
+import org.our.runner.OurReportModule;
 import org.our.runner.OurRunnerModule;
 
 /**
@@ -29,11 +30,16 @@ public class OurConfiguredRunner {
                         "You need to provide your own Configuration.");
             }
 
-            Injector injector = Guice.createInjector(new OurBaseModule());
+            Injector injector =
+                    Guice.createInjector(new OurBaseModule(ourConfiguration));
             Injector childInjector =
-                    injector.createChildInjector(new OurRunnerModule(injector));
-            injector.injectMembers(ourConfiguration);
-            BaseStory story = childInjector.getInstance(BaseStory.class);
+                    injector.createChildInjector(new OurReportModule(injector));
+
+
+            Injector granChildInjector =
+                    childInjector.createChildInjector(
+                            new OurRunnerModule(childInjector));
+            BaseStory story = granChildInjector.getInstance(BaseStory.class);
             story.run();
         } finally {
             if (ourConfiguration != null) {
