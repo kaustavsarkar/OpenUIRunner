@@ -73,7 +73,7 @@ cases as well, making sure the performance does not suffer.
 ### *In the pipeline*:
 - [ ] Unit tests.
 - [ ] Test with other drivers as well.
-- [ ]Add more use case and tests to cover multiple scenarios and cover edge 
+- [ ] Add more use case and tests to cover multiple scenarios and cover edge 
   cases.
 - [ ] Ask users to provide timeouts.
 - [ ] Add defaults to OurConfiguration.
