@@ -6,7 +6,7 @@ package org.our.configuration;
  */
 public enum DriverName {
     CHROME_DRIVER("chromedriver", "chrome", "webdriver.chrome.driver"),
-    GECKO_DRIVER("geckodriver.exe", "firefox", "webdriver.gecko.driver");
+    GECKO_DRIVER("geckodriver", "firefox", "webdriver.gecko.driver");
 
     private final String driverName;
     private final String browser;

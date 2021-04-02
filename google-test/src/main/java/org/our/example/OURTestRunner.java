@@ -18,7 +18,7 @@ public class OURTestRunner {
                         .setRelDataPath("google/TestData.csv")
                         .setReportPath("/home/kaustav/OUR")
                         .setStoryRegex(Optional.of("google/test_google.story"))
-                        .setWebDriverPath("/home/kaustav/OUR/")
+                        .setWebDriverPath("/home/kaustav/OUR/chromedriver")
                         .build();
         OurConfiguredRunner runner = new OurConfiguredRunner();
         runner.executeWithConfig(configuration);
