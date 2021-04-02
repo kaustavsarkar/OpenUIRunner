@@ -186,8 +186,7 @@ public abstract class OurConfiguration {
         public OurConfiguration build() {
             System.setProperty(
                     getDriverName().getPropertyKey(),
-                    getWebDriverPath() +
-                            getDriverName().getDriverName());
+                    getWebDriverPath());
             CustomWebDriverProvider driverProvider =
                     new CustomWebDriverProvider();
             if (getDriverName() == null) {
